@@ -31,14 +31,14 @@ export function GradientEditor({ value, onChange }: GradientEditorProps) {
       <div className="space-y-2">
         <Label>From</Label>
         <ColorEditor
-          value={value.from}
-          onChange={(v) => update({ from: v })}
+          value={value.fromColor}
+          onChange={(v) => update({ fromColor: v })}
         />
       </div>
 
       <div className="space-y-2">
         <Label>To</Label>
-        <ColorEditor value={value.to} onChange={(v) => update({ to: v })} />
+        <ColorEditor value={value.toColor} onChange={(v) => update({ toColor: v })} />
       </div>
 
       <div className="flex items-center gap-3">
@@ -46,7 +46,7 @@ export function GradientEditor({ value, onChange }: GradientEditorProps) {
           <Label>Angle</Label>
           <Input
             type="number"
-            value={value.angle}
+            value={value.angle ?? ""}
             min={0}
             max={360}
             step={1}

@@ -216,11 +216,11 @@ export function AnimationCard({ name, label, description }: AnimationCardProps) 
               <SettingsRow label="Curve" description="Easing curve function">
                 <Select
                   value={kind.curve}
-                  onValueChange={(v) =>
-                    updateAnimation({
+                  onValueChange={(v) => {
+                    if (v !== null) updateAnimation({
                       kind: { ...kind, curve: v },
-                    })
-                  }
+                    });
+                  }}
                 >
                   <SelectTrigger className="w-44">
                     <SelectValue />

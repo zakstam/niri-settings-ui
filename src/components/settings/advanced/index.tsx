@@ -28,6 +28,8 @@ export function AdvancedSection() {
     const newRule: LayerRule = {
       id: generateId(),
       matches: [{ namespace: newNamespace.trim(), atStartup: null }],
+      blockOutFrom: null,
+      opacity: null,
       placeWithinBackdrop: null,
     };
     updateConfig((prev) => ({

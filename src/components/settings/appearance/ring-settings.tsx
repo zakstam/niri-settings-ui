@@ -29,8 +29,8 @@ function updateFocusRing(
 }
 
 const defaultGradient: GradientConfig = {
-  from: "#ff0000",
-  to: "#0000ff",
+  fromColor: "#ff0000",
+  toColor: "#0000ff",
   angle: 180,
   relativeTo: null,
   colorSpace: null,
@@ -59,7 +59,7 @@ export function RingSettings() {
           <SettingsRow label="Width" description="Thickness of the focus ring in pixels">
             <div className="flex items-center gap-3">
               <Slider
-                value={[ring.width]}
+                value={[ring.width ?? 0]}
                 min={0}
                 max={20}
                 step={1}
@@ -70,7 +70,7 @@ export function RingSettings() {
               />
               <Input
                 type="number"
-                value={ring.width}
+                value={ring.width ?? ""}
                 min={0}
                 max={20}
                 className="w-20"

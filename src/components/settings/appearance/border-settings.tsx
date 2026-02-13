@@ -29,8 +29,8 @@ function updateBorder(
 }
 
 const defaultGradient: GradientConfig = {
-  from: "#ff0000",
-  to: "#0000ff",
+  fromColor: "#ff0000",
+  toColor: "#0000ff",
   angle: 180,
   relativeTo: null,
   colorSpace: null,
@@ -59,7 +59,7 @@ export function BorderSettings() {
           <SettingsRow label="Width" description="Thickness of the border in pixels">
             <div className="flex items-center gap-3">
               <Slider
-                value={[border.width]}
+                value={[border.width ?? 0]}
                 min={0}
                 max={20}
                 step={1}
@@ -70,7 +70,7 @@ export function BorderSettings() {
               />
               <Input
                 type="number"
-                value={border.width}
+                value={border.width ?? ""}
                 min={0}
                 max={20}
                 className="w-20"

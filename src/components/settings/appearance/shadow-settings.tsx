@@ -42,7 +42,7 @@ export function ShadowSettings() {
         <>
           <SettingsRow label="Draw Behind Window" description="Draw the shadow behind the window, not just around it">
             <Switch
-              checked={shadow.drawBehindWindow}
+              checked={shadow.drawBehindWindow ?? false}
               onCheckedChange={(v) =>
                 updateConfig((prev) => updateShadow(prev, { drawBehindWindow: v }))
               }
@@ -52,7 +52,7 @@ export function ShadowSettings() {
           <SettingsRow label="Softness" description="Blur radius of the shadow (0-100)">
             <div className="flex items-center gap-3">
               <Slider
-                value={[shadow.softness]}
+                value={[shadow.softness ?? 0]}
                 min={0}
                 max={100}
                 step={1}
@@ -63,7 +63,7 @@ export function ShadowSettings() {
               />
               <Input
                 type="number"
-                value={shadow.softness}
+                value={shadow.softness ?? ""}
                 min={0}
                 max={100}
                 className="w-20"
@@ -79,7 +79,7 @@ export function ShadowSettings() {
           <SettingsRow label="Spread" description="How far the shadow extends beyond the window (-20 to 40)">
             <div className="flex items-center gap-3">
               <Slider
-                value={[shadow.spread]}
+                value={[shadow.spread ?? 0]}
                 min={-20}
                 max={40}
                 step={1}
@@ -90,7 +90,7 @@ export function ShadowSettings() {
               />
               <Input
                 type="number"
-                value={shadow.spread}
+                value={shadow.spread ?? ""}
                 min={-20}
                 max={40}
                 className="w-20"
@@ -109,7 +109,7 @@ export function ShadowSettings() {
                 <span className="text-xs text-muted-foreground">X</span>
                 <Input
                   type="number"
-                  value={shadow.offsetX}
+                  value={shadow.offsetX ?? ""}
                   className="w-20"
                   onChange={(e) =>
                     updateConfig((prev) =>
@@ -122,7 +122,7 @@ export function ShadowSettings() {
                 <span className="text-xs text-muted-foreground">Y</span>
                 <Input
                   type="number"
-                  value={shadow.offsetY}
+                  value={shadow.offsetY ?? ""}
                   className="w-20"
                   onChange={(e) =>
                     updateConfig((prev) =>

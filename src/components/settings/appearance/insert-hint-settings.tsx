@@ -20,8 +20,8 @@ function updateInsertHint(
 }
 
 const defaultGradient: GradientConfig = {
-  from: "#ff0000",
-  to: "#0000ff",
+  fromColor: "#ff0000",
+  toColor: "#0000ff",
   angle: 180,
   relativeTo: null,
   colorSpace: null,

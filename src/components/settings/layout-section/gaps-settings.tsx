@@ -14,7 +14,7 @@ export function GapsSettings() {
       <SettingsRow label="Gap Size" description="Pixel gap between tiled windows and around the workspace edges">
         <div className="flex items-center gap-3">
           <Slider
-            value={[config.layout.gaps]}
+            value={[config.layout.gaps ?? 0]}
             min={0}
             max={64}
             step={1}
@@ -28,7 +28,7 @@ export function GapsSettings() {
           />
           <Input
             type="number"
-            value={config.layout.gaps}
+            value={config.layout.gaps ?? ""}
             min={0}
             max={64}
             step={1}
