@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import { OutputCard } from "./output-card";
+import { OutputLayoutGraph } from "./output-layout-graph";
 
 export function OutputsSection() {
   const { config, updateConfig } = useConfig();
@@ -53,19 +54,17 @@ export function OutputsSection() {
         </div>
       ) : (
         <div className="space-y-4">
-          {config.outputs.map((output, index) => (
-            <div key={output.name + index} className="relative">
-              <OutputCard output={output} index={index} />
-              <Button
-                variant="destructive"
-                size="xs"
-                className="absolute top-4 right-4"
-                onClick={() => removeOutput(index)}
-              >
-                Remove
-              </Button>
-            </div>
-          ))}
+          <OutputLayoutGraph />
+          <div className="grid gap-4 sm:grid-cols-2">
+            {config.outputs.map((output, index) => (
+              <OutputCard
+                key={output.name + index}
+                output={output}
+                index={index}
+                onRemove={() => removeOutput(index)}
+              />
+            ))}
+          </div>
           <Button variant="outline" onClick={addOutput}>
             <IconPlus size={16} data-icon="inline-start" />
             Add Output

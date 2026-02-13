@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{collections::HashSet, path::PathBuf};
 
 use kdl::{KdlDocument, KdlEntry, KdlNode, KdlValue};
 use similar::{ChangeTag, TextDiff};
@@ -10,20 +10,18 @@ use super::types::*;
 pub enum WriteError {
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-    #[error("Write error: {0}")]
-    Write(String),
 }
 
 /// Apply changes from old config to new config by modifying the KDL AST.
 /// This preserves comments and formatting for unchanged parts.
 pub fn apply_changes(
     main_doc: &mut KdlDocument,
-    _included: &mut [(PathBuf, KdlDocument)],
+    included: &mut [(PathBuf, KdlDocument)],
     old: &NiriConfig,
     new: &NiriConfig,
 ) -> Result<(), WriteError> {
     apply_input_changes(main_doc, &old.input, &new.input);
-    apply_output_changes(main_doc, &old.outputs, &new.outputs);
+    apply_output_changes(main_doc, included, &old.outputs, &new.outputs);
     apply_layout_changes(main_doc, &old.layout, &new.layout);
     apply_spawn_changes(main_doc, &old.spawn_at_startup, &new.spawn_at_startup);
     apply_hotkey_overlay_changes(main_doc, &old.hotkey_overlay, &new.hotkey_overlay);
@@ -390,69 +388,107 @@ fn apply_pointer_changes(parent: &mut KdlNode, ptr: &PointerConfig) {
 
 fn apply_output_changes(
     doc: &mut KdlDocument,
-    old_outputs: &[OutputConfig],
+    included: &mut [(PathBuf, KdlDocument)],
+    _old_outputs: &[OutputConfig],
     new_outputs: &[OutputConfig],
 ) {
-    // Remove outputs that no longer exist
-    for old in old_outputs {
-        if !new_outputs.iter().any(|n| n.name == old.name) {
-            doc.nodes_mut()
-                .retain(|n| !(n.name().value() == "output" && has_output_name(n, &old.name)));
-        }
+    let desired_names: HashSet<String> = new_outputs.iter().map(|o| o.name.clone()).collect();
+
+    prune_output_nodes_for_names(doc, &desired_names);
+    for (_, included_doc) in included.iter_mut() {
+        prune_output_nodes_for_names(included_doc, &desired_names);
     }
 
-    // Add or update outputs
     for new_out in new_outputs {
-        let existing = doc.nodes_mut().iter_mut().find(|n| {
-            n.name().value() == "output" && has_output_name(n, &new_out.name)
-        });
+        let mut found = false;
+        if apply_single_output_update(doc, new_out) {
+            found = true;
+        }
 
-        if let Some(node) = existing {
-            apply_single_output_changes(node, new_out);
-        } else {
-            // Create new output node
-            let mut node = KdlNode::new("output");
-            node.push(KdlEntry::new(KdlValue::String(new_out.name.clone())));
-            let children_doc = node.ensure_children();
+        for (_, included_doc) in included.iter_mut() {
+            if apply_single_output_update(included_doc, new_out) {
+                found = true;
+            }
+        }
 
-            if new_out.off {
-                children_doc.nodes_mut().push(KdlNode::new("off"));
-            }
-            if let Some(mode) = &new_out.mode {
-                let mut mode_node = KdlNode::new("mode");
-                set_string_arg(&mut mode_node, mode);
-                children_doc.nodes_mut().push(mode_node);
-            }
-            if let Some(scale) = new_out.scale {
-                let mut scale_node = KdlNode::new("scale");
-                set_float_arg(&mut scale_node, scale);
-                children_doc.nodes_mut().push(scale_node);
-            }
-            if let Some(transform) = &new_out.transform {
-                let mut t_node = KdlNode::new("transform");
-                set_string_arg(&mut t_node, transform);
-                children_doc.nodes_mut().push(t_node);
-            }
-            if new_out.position_x.is_some() || new_out.position_y.is_some() {
-                let mut pos_node = KdlNode::new("position");
-                if let Some(x) = new_out.position_x {
-                    pos_node.push(KdlEntry::new_prop("x", KdlValue::Integer(x as i128)));
-                }
-                if let Some(y) = new_out.position_y {
-                    pos_node.push(KdlEntry::new_prop("y", KdlValue::Integer(y as i128)));
-                }
-                children_doc.nodes_mut().push(pos_node);
-            }
-
-            doc.nodes_mut().push(node);
+        if !found {
+            doc.nodes_mut().push(build_output_node(new_out));
         }
     }
 }
 
-fn has_output_name(node: &KdlNode, name: &str) -> bool {
+fn apply_single_output_update(doc: &mut KdlDocument, output: &OutputConfig) -> bool {
+    let mut updated = false;
+    for node in doc.nodes_mut() {
+        if node.name().value() != "output" {
+            continue;
+        }
+
+        if let Some(name) = get_output_name(node) {
+            if name == output.name {
+                apply_single_output_changes(node, output);
+                updated = true;
+            }
+        }
+    }
+    updated
+}
+
+fn prune_output_nodes_for_names(doc: &mut KdlDocument, desired_names: &HashSet<String>) {
+    doc.nodes_mut().retain(|node| {
+        if node.name().value() != "output" {
+            return true;
+        }
+        match get_output_name(node) {
+            Some(name) => desired_names.contains(&name),
+            None => false,
+        }
+    });
+}
+
+fn build_output_node(new_out: &OutputConfig) -> KdlNode {
+    let mut node = KdlNode::new("output");
+    node.push(KdlEntry::new(KdlValue::String(new_out.name.clone())));
+    let children_doc = node.ensure_children();
+
+    if new_out.off {
+        children_doc.nodes_mut().push(KdlNode::new("off"));
+    }
+    if let Some(mode) = &new_out.mode {
+        let mut mode_node = KdlNode::new("mode");
+        set_string_arg(&mut mode_node, mode);
+        children_doc.nodes_mut().push(mode_node);
+    }
+    if let Some(scale) = new_out.scale {
+        let mut scale_node = KdlNode::new("scale");
+        set_float_arg(&mut scale_node, scale);
+        children_doc.nodes_mut().push(scale_node);
+    }
+    if let Some(transform) = &new_out.transform {
+        let mut t_node = KdlNode::new("transform");
+        set_string_arg(&mut t_node, transform);
+        children_doc.nodes_mut().push(t_node);
+    }
+    if new_out.position_x.is_some() || new_out.position_y.is_some() {
+        let mut pos_node = KdlNode::new("position");
+        if let Some(x) = new_out.position_x {
+            pos_node.push(KdlEntry::new_prop("x", KdlValue::Integer(x as i128)));
+        }
+        if let Some(y) = new_out.position_y {
+            pos_node.push(KdlEntry::new_prop("y", KdlValue::Integer(y as i128)));
+        }
+        children_doc.nodes_mut().push(pos_node);
+    }
+
+    node
+}
+
+fn get_output_name(node: &KdlNode) -> Option<String> {
     node.entries()
         .iter()
-        .any(|e| e.name().is_none() && e.value().as_string() == Some(name))
+        .find(|entry| entry.name().is_none())
+        .and_then(|entry| entry.value().as_string())
+        .map(ToString::to_string)
 }
 
 fn apply_single_output_changes(node: &mut KdlNode, out: &OutputConfig) {

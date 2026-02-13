@@ -17,7 +17,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { NiriConfig, OutputConfig } from "@/lib/types";
+import { IconTrash } from "@tabler/icons-react";
 
 const transformItems = [
   { label: "Normal", value: "normal" },
@@ -33,6 +35,7 @@ const transformItems = [
 interface OutputCardProps {
   output: OutputConfig;
   index: number;
+  onRemove: () => void;
 }
 
 function updateOutput(
@@ -46,17 +49,35 @@ function updateOutput(
   return { ...prev, outputs };
 }
 
-export function OutputCard({ output, index }: OutputCardProps) {
+export function OutputCard({
+  output,
+  index,
+  onRemove,
+}: OutputCardProps) {
   const { updateConfig } = useConfig();
+  const isPrimary = index === 0;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          {output.name}
-          {output.off && (
-            <Badge variant="secondary">Disabled</Badge>
-          )}
+        <CardTitle className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            {output.name}
+            {output.off && (
+              <Badge variant="secondary">Disabled</Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              type="button"
+              onClick={onRemove}
+              aria-label="Remove monitor"
+            >
+              <IconTrash size={14} />
+            </Button>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -125,17 +146,24 @@ export function OutputCard({ output, index }: OutputCardProps) {
           </Select>
         </SettingsRow>
 
-        <SettingsRow label="Position" description="X and Y position of this output in the layout">
+        <SettingsRow
+          label="Position"
+          description={isPrimary
+            ? "Main display is fixed at 0, 0"
+            : "X and Y position of this output in the layout"}
+        >
           <div className="flex items-center gap-2">
             <Input
               type="number"
-              value={output.positionX ?? ""}
+              value={isPrimary ? 0 : output.positionX ?? ""}
               placeholder="X"
               className="w-20"
+              readOnly={isPrimary}
+              disabled={isPrimary}
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateOutput(prev, index, {
-                    positionX: e.target.value === "" ? null : Number(e.target.value),
+                    positionX: isPrimary ? 0 : (e.target.value === "" ? null : Number(e.target.value)),
                   }),
                 )
               }
@@ -143,13 +171,15 @@ export function OutputCard({ output, index }: OutputCardProps) {
             <span className="text-xs text-muted-foreground">x</span>
             <Input
               type="number"
-              value={output.positionY ?? ""}
+              value={isPrimary ? 0 : output.positionY ?? ""}
               placeholder="Y"
               className="w-20"
+              readOnly={isPrimary}
+              disabled={isPrimary}
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateOutput(prev, index, {
-                    positionY: e.target.value === "" ? null : Number(e.target.value),
+                    positionY: isPrimary ? 0 : (e.target.value === "" ? null : Number(e.target.value)),
                   }),
                 )
               }
