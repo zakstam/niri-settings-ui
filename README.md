@@ -6,6 +6,10 @@
 
 <p align="center">A graphical settings editor for the <a href="https://github.com/YaLTeR/niri">niri</a> Wayland compositor.<br/>Built with Tauri, React, and Rust.</p>
 
+<p align="center">
+  <img src="public/screenshot.png" width="700" />
+</p>
+
 ---
 
 ## Download
