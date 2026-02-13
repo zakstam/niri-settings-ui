@@ -25,13 +25,13 @@ export function TouchSettings() {
   const touch = config.input.touch;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="Touch">
         <SettingsRow label="Map to Output" description="Constrain touch input to a specific output">
           <Input
             value={touch.mapToOutput ?? ""}
             placeholder="Output name"
-            className="w-44"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) =>
                 updateTouch(prev, {

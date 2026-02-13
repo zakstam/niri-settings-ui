@@ -25,7 +25,7 @@ export function InputSection() {
         description="Configure keyboard, touchpad, mouse, trackpoint, and focus behavior"
       />
       <Tabs defaultValue="keyboard">
-        <TabsList>
+        <TabsList variant="line" className="gap-0.5 mb-2">
           <TabsTrigger value="keyboard">
             <IconKeyboard size={16} />
             Keyboard

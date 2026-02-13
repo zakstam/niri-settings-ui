@@ -20,13 +20,13 @@ export function KeyboardSettings() {
   const { xkb } = config.input.keyboard;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="XKB Configuration" description="X keyboard extension layout settings">
         <SettingsRow label="Layout" description="Keyboard layout (e.g. us, de, fr)">
           <Input
             value={xkb.layout ?? ""}
             placeholder="us"
-            className="w-40"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -49,7 +49,7 @@ export function KeyboardSettings() {
           <Input
             value={xkb.model ?? ""}
             placeholder="pc105"
-            className="w-40"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -72,7 +72,7 @@ export function KeyboardSettings() {
           <Input
             value={xkb.variant ?? ""}
             placeholder=""
-            className="w-40"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -95,7 +95,7 @@ export function KeyboardSettings() {
           <Input
             value={xkb.options ?? ""}
             placeholder=""
-            className="w-40"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -118,7 +118,7 @@ export function KeyboardSettings() {
           <Input
             value={xkb.rules ?? ""}
             placeholder=""
-            className="w-40"
+            className="w-48"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -165,7 +165,7 @@ export function KeyboardSettings() {
             value={config.input.keyboard.repeatDelay ?? ""}
             placeholder="600"
             min={0}
-            className="w-24"
+            className="w-28"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -187,7 +187,7 @@ export function KeyboardSettings() {
             value={config.input.keyboard.repeatRate ?? ""}
             placeholder="25"
             min={0}
-            className="w-24"
+            className="w-28"
             onChange={(e) =>
               updateConfig((prev) => ({
                 ...prev,
@@ -219,7 +219,7 @@ export function KeyboardSettings() {
               }))
             }
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

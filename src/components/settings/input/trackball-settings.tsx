@@ -45,7 +45,7 @@ export function TrackballSettings() {
   const tb = config.input.trackball;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Trackball" description="Turn off trackball input entirely">
           <Switch
@@ -78,14 +78,14 @@ export function TrackballSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[tb.accelSpeed ?? 0]}
               min={-1}
               max={1}
               step={0.1}
               onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateTrackball(prev, { accelSpeed: v })); }}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -93,7 +93,7 @@ export function TrackballSettings() {
               min={-1}
               max={1}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateTrackball(prev, {
@@ -110,7 +110,7 @@ export function TrackballSettings() {
             value={tb.accelProfile ?? "adaptive"}
             onValueChange={(v) => updateConfig((prev) => updateTrackball(prev, { accelProfile: v }))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -132,7 +132,7 @@ export function TrackballSettings() {
             value={tb.scrollMethod ?? "no-scroll"}
             onValueChange={(v) => updateConfig((prev) => updateTrackball(prev, { scrollMethod: v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -153,7 +153,7 @@ export function TrackballSettings() {
             value={tb.scrollButton ?? ""}
             placeholder="274"
             min={0}
-            className="w-24"
+            className="w-28"
             onChange={(e) =>
               updateConfig((prev) =>
                 updateTrackball(prev, {

@@ -45,7 +45,7 @@ export function MouseSettings() {
   const mouse = config.input.mouse;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Mouse" description="Turn off mouse input entirely">
           <Switch
@@ -78,14 +78,14 @@ export function MouseSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[mouse.accelSpeed ?? 0]}
               min={-1}
               max={1}
               step={0.1}
               onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateMouse(prev, { accelSpeed: v })); }}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -93,7 +93,7 @@ export function MouseSettings() {
               min={-1}
               max={1}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateMouse(prev, {
@@ -110,7 +110,7 @@ export function MouseSettings() {
             value={mouse.accelProfile ?? "adaptive"}
             onValueChange={(v) => updateConfig((prev) => updateMouse(prev, { accelProfile: v }))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -132,7 +132,7 @@ export function MouseSettings() {
             value={mouse.scrollMethod ?? "no-scroll"}
             onValueChange={(v) => updateConfig((prev) => updateMouse(prev, { scrollMethod: v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -148,14 +148,14 @@ export function MouseSettings() {
         </SettingsRow>
 
         <SettingsRow label="Scroll Factor" description="Multiplier for scroll speed (default 1.0)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[mouse.scrollFactor ?? 1.0]}
               min={0.1}
               max={5}
               step={0.1}
               onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateMouse(prev, { scrollFactor: v })); }}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -163,7 +163,7 @@ export function MouseSettings() {
               min={0.1}
               max={5}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateMouse(prev, {

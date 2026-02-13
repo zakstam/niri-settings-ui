@@ -20,7 +20,7 @@ export function FocusSettings() {
   const ffmEnabled = config.input.focusFollowsMouse !== null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="Focus Behavior" description="Configure how window focus follows the mouse">
         <SettingsRow label="Warp Mouse to Focus" description="Move the mouse cursor to the newly focused window">
           <Switch
@@ -57,7 +57,7 @@ export function FocusSettings() {
             <Input
               value={config.input.focusFollowsMouse?.maxScrollAmount ?? ""}
               placeholder="25%"
-              className="w-28"
+              className="w-32"
               onChange={(e) =>
                 updateConfig((prev) => ({
                   ...prev,
@@ -110,7 +110,7 @@ export function FocusSettings() {
               }))
             }
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-36">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -134,7 +134,7 @@ export function FocusSettings() {
               }))
             }
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-36">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

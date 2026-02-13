@@ -48,19 +48,19 @@ export function ApplyBar() {
   return (
     <div
       className={cn(
-        "fixed bottom-0 right-0 left-52 z-40 transition-all duration-300 ease-out",
+        "fixed bottom-0 right-0 left-0 z-40 transition-all duration-300 ease-out",
         isDirty
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-full opacity-0",
       )}
     >
-      {/* Glow line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-amber to-transparent opacity-40" />
+      {/* Warm accent line */}
+      <div className="h-px bg-gradient-to-r from-transparent via-accent-color/30 to-transparent" />
 
-      <div className="border-t border-border bg-card/90 px-6 py-3 backdrop-blur-xl">
-        <div className="flex items-center justify-end gap-2.5">
+      <div className="glass-surface border-t border-glass-border px-6 py-3.5">
+        <div className="flex items-center justify-end gap-3">
           <div className="mr-auto flex items-center gap-2">
-            <div className="size-1.5 rounded-full bg-amber animate-pulse" />
+            <div className="size-1.5 rounded-full bg-accent-color" />
             <span className="text-[12px] font-medium text-muted-foreground">
               Unsaved changes
             </span>
@@ -121,7 +121,6 @@ export function ApplyBar() {
             size="sm"
             onClick={() => void handleApply()}
             disabled={isApplying}
-            className="bg-amber text-primary-foreground hover:bg-amber/90 shadow-[0_0_12px_var(--glow)]"
           >
             <IconCheck size={14} />
             {isApplying ? "Applying..." : "Apply"}

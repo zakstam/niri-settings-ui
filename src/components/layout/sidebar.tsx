@@ -1,3 +1,6 @@
+import { cn } from "@/lib/utils";
+import { useState, useRef, useEffect, useCallback } from "react";
+import niriLogo from "@/assets/niri-logo.png";
 import {
   IconKeyboard,
   IconDeviceDesktop,
@@ -10,9 +13,16 @@ import {
   IconHandGrab,
   IconRocket,
   IconSettings,
+  IconChevronRight,
+  IconChevronLeft,
 } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
 import type { ComponentType } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type Section =
   | "input"
@@ -33,7 +43,7 @@ interface NavItem {
   icon: ComponentType<{ size?: number; className?: string }>;
 }
 
-const navItems: NavItem[] = [
+export const navItems: NavItem[] = [
   { id: "input", label: "Input", icon: IconKeyboard },
   { id: "outputs", label: "Outputs", icon: IconDeviceDesktop },
   { id: "layout", label: "Layout", icon: IconLayout },
@@ -53,67 +63,108 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
+  const [showLabels, setShowLabels] = useState(false);
+  const [labelsFit, setLabelsFit] = useState(true);
+  const navRef = useRef<HTMLElement>(null);
+
+  // Check if nav overflows when labels are shown
+  const checkOverflow = useCallback(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    setLabelsFit(nav.scrollWidth <= nav.clientWidth);
+  }, []);
+
+  // Re-check on resize and when labels toggle
+  useEffect(() => {
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    if (navRef.current) observer.observe(navRef.current);
+    return () => observer.disconnect();
+  }, [showLabels, checkOverflow]);
+
+  // Auto-collapse labels when they no longer fit
+  useEffect(() => {
+    if (showLabels && !labelsFit) {
+      setShowLabels(false);
+    }
+  }, [labelsFit, showLabels]);
+
   return (
-    <aside className="flex h-full w-52 shrink-0 flex-col bg-sidebar">
-      {/* Logo / App title */}
-      <div className="flex items-center gap-2.5 px-5 pt-6 pb-5">
-        <div className="flex size-7 items-center justify-center rounded-md bg-amber-muted">
-          <span className="text-xs font-bold text-amber">N</span>
-        </div>
-        <div>
-          <h1 className="text-[13px] font-semibold tracking-tight text-foreground">
-            Niri Settings
-          </h1>
-          <p className="text-[10px] font-mono tracking-wider text-muted-foreground uppercase">
-            Compositor
-          </p>
-        </div>
-      </div>
+    <header className="glass-surface flex h-14 w-full shrink-0 items-center border-b border-glass-border px-4 gap-3">
+      {/* App mark */}
+      <img src={niriLogo} alt="niri" className="size-9 rounded-lg select-none" draggable={false} />
 
-      {/* Subtle divider line */}
-      <div className="mx-4 h-px bg-sidebar-border" />
+      <div className="h-5 w-px bg-border" />
 
-      {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeSection === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onSectionChange(item.id)}
-              className={cn(
-                "group relative flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] transition-all duration-150",
-                isActive
-                  ? "bg-amber-subtle text-foreground font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-              )}
-            >
-              {/* Active indicator bar */}
-              {isActive && (
-                <div className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-amber" />
-              )}
-
-              <Icon
-                size={16}
-                className={cn(
-                  "shrink-0 transition-colors duration-150",
-                  isActive ? "text-amber" : "text-muted-foreground group-hover:text-sidebar-accent-foreground",
+      {/* Navigation – horizontal workspace strip */}
+      <TooltipProvider delay={300}>
+        <nav ref={navRef} className="flex flex-1 items-center gap-1 overflow-hidden">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
+            const Icon = item.icon;
+            const showLabel = isActive || showLabels;
+            return (
+              <Tooltip key={item.id}>
+                <TooltipTrigger
+                  render={
+                    <button
+                      onClick={() => onSectionChange(item.id)}
+                      className={cn(
+                        "relative flex h-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-200",
+                        showLabel
+                          ? "gap-2 px-3"
+                          : "w-9 hover:bg-accent/50",
+                        isActive
+                          ? "bg-accent-color-subtle"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    />
+                  }
+                >
+                  <Icon
+                    size={18}
+                    className={cn("shrink-0", isActive && "text-accent-color")}
+                  />
+                  {showLabel && (
+                    <span
+                      className={cn(
+                        "text-xs font-medium whitespace-nowrap select-none",
+                        isActive ? "text-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  )}
+                </TooltipTrigger>
+                {!showLabels && (
+                  <TooltipContent side="bottom" sideOffset={8}>
+                    {item.label}
+                  </TooltipContent>
                 )}
-              />
-              <span className="truncate">{item.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+              </Tooltip>
+            );
+          })}
+        </nav>
+      </TooltipProvider>
 
-      {/* Bottom version info */}
-      <div className="px-5 pb-4">
-        <div className="h-px bg-sidebar-border mb-3" />
-        <p className="text-[10px] font-mono text-muted-foreground/50 tracking-wider">
-          v0.1.0
-        </p>
-      </div>
-    </aside>
+      <div className="h-5 w-px bg-border" />
+
+      {/* Toggle labels */}
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <button
+              onClick={() => setShowLabels((v) => !v)}
+              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-accent/50 hover:text-foreground"
+            />
+          }
+        >
+          {showLabels ? <IconChevronLeft size={18} /> : <IconChevronRight size={18} />}
+        </TooltipTrigger>
+        <TooltipContent side="bottom" sideOffset={8}>
+          {showLabels ? "Hide labels" : "Show labels"}
+        </TooltipContent>
+      </Tooltip>
+    </header>
   );
 }

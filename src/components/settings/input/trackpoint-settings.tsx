@@ -45,7 +45,7 @@ export function TrackpointSettings() {
   const tp = config.input.trackpoint;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Trackpoint" description="Turn off trackpoint input entirely">
           <Switch
@@ -78,14 +78,14 @@ export function TrackpointSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[tp.accelSpeed ?? 0]}
               min={-1}
               max={1}
               step={0.1}
               onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateTrackpoint(prev, { accelSpeed: v })); }}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -93,7 +93,7 @@ export function TrackpointSettings() {
               min={-1}
               max={1}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateTrackpoint(prev, {
@@ -110,7 +110,7 @@ export function TrackpointSettings() {
             value={tp.accelProfile ?? "adaptive"}
             onValueChange={(v) => updateConfig((prev) => updateTrackpoint(prev, { accelProfile: v }))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -132,7 +132,7 @@ export function TrackpointSettings() {
             value={tp.scrollMethod ?? "on-button-down"}
             onValueChange={(v) => updateConfig((prev) => updateTrackpoint(prev, { scrollMethod: v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -153,7 +153,7 @@ export function TrackpointSettings() {
             value={tp.scrollButton ?? ""}
             placeholder="274"
             min={0}
-            className="w-24"
+            className="w-28"
             onChange={(e) =>
               updateConfig((prev) =>
                 updateTrackpoint(prev, {
@@ -172,14 +172,14 @@ export function TrackpointSettings() {
         </SettingsRow>
 
         <SettingsRow label="Scroll Factor" description="Multiplier for scroll speed (default 1.0)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[tp.scrollFactor ?? 1.0]}
               min={0.1}
               max={5}
               step={0.1}
               onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateTrackpoint(prev, { scrollFactor: v })); }}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -187,7 +187,7 @@ export function TrackpointSettings() {
               min={0.1}
               max={5}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateTrackpoint(prev, {

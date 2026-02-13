@@ -47,7 +47,7 @@ export function TouchpadSettings() {
   const tp = config.input.touchpad;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Touchpad" description="Turn off the touchpad entirely">
           <Switch
@@ -117,14 +117,14 @@ export function TouchpadSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[tp.accelSpeed ?? 0]}
               min={-1}
               max={1}
               step={0.1}
               onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { accelSpeed: Array.isArray(v) ? v[0] : v }))}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -132,7 +132,7 @@ export function TouchpadSettings() {
               min={-1}
               max={1}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateTouchpad(prev, {
@@ -149,7 +149,7 @@ export function TouchpadSettings() {
             value={tp.accelProfile ?? "adaptive"}
             onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { accelProfile: v }))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -171,7 +171,7 @@ export function TouchpadSettings() {
             value={tp.scrollMethod ?? "two-finger"}
             onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { scrollMethod: v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -187,14 +187,14 @@ export function TouchpadSettings() {
         </SettingsRow>
 
         <SettingsRow label="Scroll Factor" description="Multiplier for scroll speed (default 1.0)">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Slider
               value={[tp.scrollFactor ?? 1.0]}
               min={0.1}
               max={5}
               step={0.1}
               onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { scrollFactor: Array.isArray(v) ? v[0] : v }))}
-              className="w-40"
+              className="w-48"
             />
             <Input
               type="number"
@@ -202,7 +202,7 @@ export function TouchpadSettings() {
               min={0.1}
               max={5}
               step={0.1}
-              className="w-20"
+              className="w-24"
               onChange={(e) =>
                 updateConfig((prev) =>
                   updateTouchpad(prev, {
@@ -221,7 +221,7 @@ export function TouchpadSettings() {
             value={tp.tapButtonMap ?? "__none__"}
             onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { tapButtonMap: v === "__none__" ? null : v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-52">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -239,7 +239,7 @@ export function TouchpadSettings() {
             value={tp.clickMethod ?? "__none__"}
             onValueChange={(v) => updateConfig((prev) => updateTouchpad(prev, { clickMethod: v === "__none__" ? null : v }))}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
