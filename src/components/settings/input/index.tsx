@@ -1,5 +1,6 @@
-import { PageHeader } from "@/components/layout/page-header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "spatial-grid-nav/primitives";
+import { PageHeader } from "spatial-grid-nav/layouts";
+import { NavigationGroup } from "spatial-grid-nav/react";
 import { KeyboardSettings } from "./keyboard-settings";
 import { TouchpadSettings } from "./touchpad-settings";
 import { MouseSettings } from "./mouse-settings";
@@ -25,40 +26,45 @@ export function InputSection() {
         description="Configure keyboard, touchpad, mouse, trackpoint, and focus behavior"
       />
       <Tabs defaultValue="keyboard">
-        <TabsList variant="line" className="gap-0.5 mb-2">
-          <TabsTrigger value="keyboard">
-            <IconKeyboard size={16} />
-            Keyboard
-          </TabsTrigger>
-          <TabsTrigger value="touchpad">
-            <IconHandFinger size={16} />
-            Touchpad
-          </TabsTrigger>
-          <TabsTrigger value="mouse">
-            <IconMouse size={16} />
-            Mouse
-          </TabsTrigger>
-          <TabsTrigger value="trackpoint">
-            <IconCircleDot size={16} />
-            Trackpoint
-          </TabsTrigger>
-          <TabsTrigger value="focus">
-            <IconFocus2 size={16} />
-            Focus
-          </TabsTrigger>
-          <TabsTrigger value="trackball">
-            <IconCircleDot size={16} />
-            Trackball
-          </TabsTrigger>
-          <TabsTrigger value="tablet">
-            <IconDeviceTablet size={16} />
-            Tablet
-          </TabsTrigger>
-          <TabsTrigger value="touch">
-            <IconHandFinger size={16} />
-            Touch
-          </TabsTrigger>
-        </TabsList>
+        <NavigationGroup label="Input device tabs" orientation="horizontal" className="glass rounded-2xl border border-transparent bg-card transition-all duration-200 relative p-2">
+          <TabsList
+            variant="line"
+            className="gap-0.5"
+          >
+            <TabsTrigger value="keyboard">
+              <IconKeyboard size={16} />
+              Keyboard
+            </TabsTrigger>
+            <TabsTrigger value="touchpad">
+              <IconHandFinger size={16} />
+              Touchpad
+            </TabsTrigger>
+            <TabsTrigger value="mouse">
+              <IconMouse size={16} />
+              Mouse
+            </TabsTrigger>
+            <TabsTrigger value="trackpoint">
+              <IconCircleDot size={16} />
+              Trackpoint
+            </TabsTrigger>
+            <TabsTrigger value="focus">
+              <IconFocus2 size={16} />
+              Focus
+            </TabsTrigger>
+            <TabsTrigger value="trackball">
+              <IconCircleDot size={16} />
+              Trackball
+            </TabsTrigger>
+            <TabsTrigger value="tablet">
+              <IconDeviceTablet size={16} />
+              Tablet
+            </TabsTrigger>
+            <TabsTrigger value="touch">
+              <IconHandFinger size={16} />
+              Touch
+            </TabsTrigger>
+          </TabsList>
+        </NavigationGroup>
 
         <TabsContent value="keyboard">
           <KeyboardSettings />

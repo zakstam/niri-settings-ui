@@ -1,10 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
+import { Switch, Slider, Input } from "spatial-grid-nav/primitives";
+import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { AnimationCard } from "./animation-card";
 
 export function AnimationsSection() {

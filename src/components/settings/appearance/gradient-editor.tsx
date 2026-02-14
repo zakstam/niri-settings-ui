@@ -1,14 +1,14 @@
 import { ColorEditor } from "./color-editor";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
+  Input,
+  Label,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "spatial-grid-nav/primitives";
 import type { GradientConfig } from "@/lib/types";
 
 const relativeToItems = [

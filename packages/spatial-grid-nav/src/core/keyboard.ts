@@ -12,7 +12,7 @@ export type KeyAction =
   | { type: "groupDirection"; direction: Direction }
   | { type: "groupStrategy"; strategy: "first" | "last" }
   | { type: "sectionNav"; direction: "next" | "prev" }
-  | { type: "tab"; forward: boolean }
+  | { type: "itemCycle"; forward: boolean }
   | { type: "escape" };
 
 export function parseBinding(binding: string): ParsedBinding {
@@ -48,9 +48,17 @@ export function resolveAction(
   event: KeyboardEvent,
   bindings: KeyBindings,
 ): KeyAction | null {
-  // Tab / Shift+Tab (hardcoded, not configurable)
-  if (event.key === "Tab" && !event.ctrlKey && !event.altKey && !event.metaKey) {
-    return { type: "tab", forward: !event.shiftKey };
+  // Plain arrows cycle items within a group (filtered by orientation in engine)
+  if (
+    (event.key === "ArrowDown" || event.key === "ArrowUp" ||
+     event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+    !event.ctrlKey &&
+    !event.altKey &&
+    !event.shiftKey &&
+    !event.metaKey
+  ) {
+    const forward = event.key === "ArrowDown" || event.key === "ArrowRight";
+    return { type: "itemCycle", forward };
   }
 
   // Escape (hardcoded)

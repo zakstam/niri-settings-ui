@@ -1,8 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+import { Input, Switch } from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import type { NiriConfig, TabletConfig } from "@/lib/types";
 
 function updateTablet(

@@ -1,10 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
+import { Input, Switch, Slider } from "spatial-grid-nav/primitives";
+import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { ColorEditor } from "@/components/settings/appearance/color-editor";
 import type {
   NiriConfig,

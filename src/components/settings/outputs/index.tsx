@@ -1,6 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
+import { Button, Card, CardContent } from "spatial-grid-nav/primitives";
+import { PageHeader } from "spatial-grid-nav/layouts";
 import { IconPlus } from "@tabler/icons-react";
 import { OutputCard } from "./output-card";
 import { OutputLayoutGraph } from "./output-layout-graph";
@@ -43,15 +43,19 @@ export function OutputsSection() {
       />
 
       {config.outputs.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-16">
-          <p className="text-sm text-muted-foreground">
-            No outputs configured. Add an output to get started.
-          </p>
-          <Button variant="outline" onClick={addOutput}>
-            <IconPlus size={16} data-icon="inline-start" />
-            Add Output
-          </Button>
-        </div>
+        <Card>
+          <CardContent className="py-12">
+            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-12">
+              <p className="text-sm text-muted-foreground">
+                No outputs configured. Add an output to get started.
+              </p>
+              <Button variant="outline" onClick={addOutput}>
+                <IconPlus size={16} data-icon="inline-start" />
+                Add Output
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       ) : (
         <div className="space-y-4">
           <OutputLayoutGraph />

@@ -5,22 +5,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
+  Button,
+  Input,
+  Switch,
+  Slider,
+  Label,
+  Separator,
+  ScrollArea,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "spatial-grid-nav/primitives";
 import { IconPlus } from "@tabler/icons-react";
 import { MatchEditor } from "./match-editor";
 import type { WindowRule, MatchRule, ColumnWidth } from "@/lib/types";

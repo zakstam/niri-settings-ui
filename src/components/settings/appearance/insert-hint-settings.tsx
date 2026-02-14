@@ -1,7 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { ColorEditor } from "./color-editor";
 import { GradientEditor } from "./gradient-editor";
 import type { NiriConfig, InsertHintConfig, GradientConfig } from "@/lib/types";

@@ -1,15 +1,14 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import {
+  Input,
+  Switch,
+  Slider,
+  Button,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { IconChevronDown } from "@tabler/icons-react";
 import { ColorEditor } from "./color-editor";
 import { GradientEditor } from "./gradient-editor";

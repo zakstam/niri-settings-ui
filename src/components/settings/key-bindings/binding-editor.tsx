@@ -5,12 +5,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
+  Button,
+  Input,
+  Label,
+  Switch,
+  Separator,
+} from "spatial-grid-nav/primitives";
 import { KeyRecorder } from "./key-recorder";
 import { ActionPicker } from "./action-picker";
 import type { KeyBinding } from "@/lib/types";

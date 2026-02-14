@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/layout/page-header";
+import { PageHeader } from "spatial-grid-nav/layouts";
 import { RingSettings } from "./ring-settings";
 import { BorderSettings } from "./border-settings";
 import { ShadowSettings } from "./shadow-settings";

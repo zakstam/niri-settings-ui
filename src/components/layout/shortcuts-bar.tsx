@@ -23,9 +23,15 @@ export function ShortcutsBar() {
   return (
     <div className="fixed bottom-4 left-1/2 z-30 -translate-x-1/2">
       <div className="glass flex items-center gap-5 rounded-xl px-5 py-2.5">
-        <Shortcut keys={["Ctrl", "\u2190"]} label="Previous section" />
+        <Shortcut keys={['Ctrl', '←']} label="Previous section" />
+        <Shortcut keys={['Ctrl', '→']} label="Next section" />
         <div className="h-3.5 w-px bg-border" />
-        <Shortcut keys={["Ctrl", "\u2192"]} label="Next section" />
+        <Shortcut keys={['Alt', '↑↓←→']} label="Adjacent group" />
+        <Shortcut keys={['Alt', 'Home']} label="First group" />
+        <Shortcut keys={['Alt', 'End']} label="Last group" />
+        <div className="h-3.5 w-px bg-border" />
+        <Shortcut keys={['Tab']} label="Next item in group" />
+        <Shortcut keys={['Shift', 'Tab']} label="Previous item in group" />
       </div>
     </div>
   );

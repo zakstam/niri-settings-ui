@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button, Input, Card, CardContent } from "spatial-grid-nav/primitives";
+import { PageHeader, SettingsGroup } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash, IconEdit, IconCheck, IconX } from "@tabler/icons-react";
 import type { NamedWorkspace } from "@/lib/types";
 

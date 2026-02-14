@@ -5,7 +5,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/components/ui/combobox";
+} from "spatial-grid-nav/primitives";
 
 const NIRI_ACTIONS = [
   "spawn",
@@ -100,19 +100,18 @@ export function ActionPicker({ value, onChange }: ActionPickerProps) {
     <Combobox
       value={value}
       onValueChange={(v) => {
-        if (v !== null) onChange(v);
+        if (typeof v === "string") onChange(v);
       }}
-      items={NIRI_ACTIONS}
     >
       <ComboboxInput placeholder="Select action..." />
       <ComboboxContent>
         <ComboboxEmpty>No matching action.</ComboboxEmpty>
         <ComboboxList>
-          {(item) => (
+          {NIRI_ACTIONS.map((item) => (
             <ComboboxItem key={item} value={item}>
               {item}
             </ComboboxItem>
-          )}
+          ))}
         </ComboboxList>
       </ComboboxContent>
     </Combobox>

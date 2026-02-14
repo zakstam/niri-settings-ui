@@ -1,11 +1,7 @@
 import { useState, useMemo } from "react";
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button, Input, Badge, Card, CardContent } from "spatial-grid-nav/primitives";
+import { PageHeader } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash, IconEdit, IconSearch } from "@tabler/icons-react";
 import { BindingEditor } from "./binding-editor";
 import type { KeyBinding } from "@/lib/types";
@@ -82,90 +78,92 @@ export function KeyBindingsSection() {
         description="Configure keyboard shortcuts for niri actions"
       />
 
-      <div className="mb-4 flex items-center gap-2">
-        <div className="relative flex-1">
-          <IconSearch
-            size={16}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
-          />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search bindings..."
-            className="pl-8"
-          />
-        </div>
-        <Button variant="outline" onClick={addBinding}>
-          <IconPlus size={16} />
-          Add
-        </Button>
-      </div>
-
-      <ScrollArea className="h-[calc(100vh-320px)]">
-        {filteredBindings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-16">
-            <p className="text-sm text-muted-foreground">
-              {search
-                ? "No bindings match your search."
-                : "No key bindings configured."}
-            </p>
+      <Card>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <IconSearch
+                size={16}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+              />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search bindings..."
+                className="pl-8"
+              />
+            </div>
+            <Button variant="outline" onClick={addBinding}>
+              <IconPlus size={16} />
+              Add
+            </Button>
           </div>
-        ) : (
-          <div className="space-y-1.5">
-            {filteredBindings.map((binding) => (
-              <Card key={binding.id} size="sm">
-                <CardContent className="flex items-center gap-3 py-2.5">
-                  <div className="flex min-w-32 flex-wrap items-center gap-1">
-                    {binding.key.split("+").map((part, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs">
-                        {part}
-                      </Badge>
-                    ))}
-                  </div>
 
-                  <div className="flex-1 truncate">
-                    <span className="text-sm font-medium">
-                      {binding.action}
-                    </span>
-                    {binding.actionArgs.length > 0 && (
-                      <span className="ml-1.5 text-xs text-muted-foreground">
-                        {binding.actionArgs.join(" ")}
+          {filteredBindings.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-8">
+              <p className="text-sm text-muted-foreground">
+                {search
+                  ? "No bindings match your search."
+                  : "No key bindings configured."}
+              </p>
+            </div>
+          ) : (
+            <div className="max-h-[calc(100vh-360px)] space-y-1.5 overflow-auto pr-2">
+              {filteredBindings.map((binding) => (
+                <Card key={binding.id} size="sm">
+                  <CardContent className="flex items-center gap-3 py-2.5">
+                    <div className="flex min-w-32 flex-wrap items-center gap-1">
+                      {binding.key.split("+").map((part, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {part}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    <div className="flex-1 truncate">
+                      <span className="text-sm font-medium">
+                        {binding.action}
                       </span>
-                    )}
-                  </div>
+                      {binding.actionArgs.length > 0 && (
+                        <span className="ml-1.5 text-xs text-muted-foreground">
+                          {binding.actionArgs.join(" ")}
+                        </span>
+                      )}
+                    </div>
 
-                  <div className="flex shrink-0 items-center gap-1">
-                    {binding.allowWhenLocked && (
-                      <Badge variant="outline" className="text-xs">
-                        locked
-                      </Badge>
-                    )}
-                    {binding.cooldownMs && (
-                      <Badge variant="outline" className="text-xs">
-                        {binding.cooldownMs}ms
-                      </Badge>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => editBinding(binding)}
-                    >
-                      <IconEdit size={14} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => deleteBinding(binding.id)}
-                    >
-                      <IconTrash size={14} />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </ScrollArea>
+                    <div className="flex shrink-0 items-center gap-1">
+                      {binding.allowWhenLocked && (
+                        <Badge variant="outline" className="text-xs">
+                          locked
+                        </Badge>
+                      )}
+                      {binding.cooldownMs && (
+                        <Badge variant="outline" className="text-xs">
+                          {binding.cooldownMs}ms
+                        </Badge>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="icon-xs"
+                        onClick={() => editBinding(binding)}
+                      >
+                        <IconEdit size={14} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon-xs"
+                        onClick={() => deleteBinding(binding.id)}
+                      >
+                        <IconTrash size={14} />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {editingBinding && (
         <BindingEditor

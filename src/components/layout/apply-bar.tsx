@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useConfig } from "@/lib/config-context";
 import { getConfigDiff } from "@/lib/tauri";
-import { Button } from "@/components/ui/button";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -10,8 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  ScrollArea,
+} from "spatial-grid-nav/primitives";
 import { cn } from "@/lib/utils";
 import { IconCheck, IconEye, IconX } from "@tabler/icons-react";
 
@@ -69,6 +69,7 @@ export function ApplyBar() {
           <Button
             variant="ghost"
             size="sm"
+            tabIndex={-1}
             className="text-muted-foreground"
             onClick={discardChanges}
           >
@@ -78,6 +79,7 @@ export function ApplyBar() {
 
           <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
             <DialogTrigger
+              tabIndex={-1}
               render={<Button variant="outline" size="sm" />}
               onClick={() => void handlePreview()}
             >
@@ -100,12 +102,14 @@ export function ApplyBar() {
                 <Button
                   variant="outline"
                   size="sm"
+                  tabIndex={-1}
                   onClick={() => setPreviewOpen(false)}
                 >
                   Close
                 </Button>
                 <Button
                   size="sm"
+                  tabIndex={-1}
                   onClick={() => {
                     setPreviewOpen(false);
                     void handleApply();
@@ -119,6 +123,7 @@ export function ApplyBar() {
 
           <Button
             size="sm"
+            tabIndex={-1}
             onClick={() => void handleApply()}
             disabled={isApplying}
           >

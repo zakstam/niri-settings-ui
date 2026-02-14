@@ -112,6 +112,74 @@ function AppContent() {
     pendingSectionGroupFocus.current = section;
   }, []);
 
+  const scrollSectionToTop = useCallback((section: Section) => {
+    const sectionRoot = sectionRefs.current[section];
+    if (!sectionRoot) return;
+
+    const viewport = sectionRoot.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    if (viewport) {
+      viewport.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+      return;
+    }
+
+    sectionRoot.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+      inline: "nearest",
+    });
+  }, []);
+
+  const scrollGroupIntoView = useCallback((section: Section, group: HTMLElement | null) => {
+    if (!group) return;
+
+    const sectionRoot = sectionRefs.current[section];
+    if (!sectionRoot) return;
+
+    const viewport = sectionRoot.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    if (!viewport) {
+      group.scrollIntoView({
+        behavior: "auto",
+        block: "nearest",
+        inline: "nearest",
+      });
+      return;
+    }
+
+    const viewportRect = viewport.getBoundingClientRect();
+    const groupRect = group.getBoundingClientRect();
+    const topPadding = 12;
+    const bottomPadding = 12;
+
+    const viewportTop = viewport.scrollTop;
+    const groupTop = groupRect.top - viewportRect.top + viewportTop;
+    const groupBottom = groupRect.bottom - viewportRect.top + viewportTop;
+
+    let nextScrollTop = viewportTop;
+    if (groupTop < viewportTop + topPadding) {
+      nextScrollTop = Math.max(0, groupTop - topPadding);
+    } else if (groupBottom > viewportTop + viewport.clientHeight - bottomPadding) {
+      nextScrollTop = Math.min(
+        viewport.scrollHeight - viewport.clientHeight,
+        groupBottom - viewport.clientHeight + bottomPadding,
+      );
+    }
+
+    if (nextScrollTop !== viewportTop) {
+      viewport.scrollTo({
+        top: nextScrollTop,
+        behavior: "auto",
+      });
+    }
+  }, []);
+
   // Handle section navigation events from the engine
   const handleSectionNav = useCallback(
     (direction: "next" | "prev") => {
@@ -164,28 +232,32 @@ function AppContent() {
     runningAnims.current[pending.section] = [ctrl];
   });
 
-  // After section change, tell the engine about the new active section and focus first group
+  // Sync engine active section and optionally focus the first group
   useLayoutEffect(() => {
+    if (!engineRef.current) return;
+
     const sectionToFocus = pendingSectionGroupFocus.current;
-    if (!sectionToFocus) return;
-
-    const sectionRoot = sectionRefs.current[sectionToFocus];
-    if (!sectionRoot || !engineRef.current) {
+    if (sectionToFocus) {
+      const sectionRoot = sectionRefs.current[sectionToFocus];
+      if (sectionRoot) {
+        engineRef.current.setActiveSection(sectionToFocus);
+        engineRef.current.focusGroup("first");
+        scrollSectionToTop(sectionToFocus);
+      }
       pendingSectionGroupFocus.current = null;
-      return;
-    }
-
-    engineRef.current.setActiveSection(sectionToFocus);
-    engineRef.current.focusGroup("first");
-    pendingSectionGroupFocus.current = null;
-  }, [activeSection]);
-
-  // Keep engine active section in sync when section changes (without focus request)
-  useLayoutEffect(() => {
-    if (engineRef.current) {
+    } else {
       engineRef.current.setActiveSection(activeSection);
+      scrollSectionToTop(activeSection);
     }
-  }, [activeSection]);
+  }, [activeSection, scrollSectionToTop]);
+
+  const handleActiveGroupChange = useCallback((group: HTMLElement | null) => {
+    const sectionId = group?.closest("[data-sgn-section]")?.getAttribute("data-sgn-section") as
+      | Section
+      | null;
+    if (!sectionId) return;
+    scrollGroupIntoView(sectionId, group);
+  }, [scrollGroupIntoView]);
 
   if (isLoading) {
     return (
@@ -243,6 +315,7 @@ function AppContent() {
       <NavigationProvider
         engineRef={engineRef}
         onSectionNav={handleSectionNav}
+        onActiveGroupChange={handleActiveGroupChange}
       >
         <main className="relative flex-1 overflow-hidden">
           {navItems.map((item) => {
@@ -258,6 +331,7 @@ function AppContent() {
                 }}
                 data-sgn-section={item.id}
                 aria-hidden={!isActive}
+                inert={!isActive || undefined}
                 role="tabpanel"
                 tabIndex={-1}
                 className="absolute inset-0 invisible opacity-0 pointer-events-none"

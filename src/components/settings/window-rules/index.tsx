@@ -1,14 +1,7 @@
 import { useState } from "react";
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Button, Badge, Card, CardContent, CardHeader, CardTitle } from "spatial-grid-nav/primitives";
+import { PageHeader } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash, IconEdit } from "@tabler/icons-react";
 import { RuleEditor } from "./rule-editor";
 import type { WindowRule } from "@/lib/types";

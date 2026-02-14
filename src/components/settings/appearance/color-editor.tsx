@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { HexColorPicker } from "react-colorful";
-import { Input } from "@/components/ui/input";
+import { Input } from "spatial-grid-nav/primitives";
 
 interface ColorEditorProps {
   value: string | null;

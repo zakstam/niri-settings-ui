@@ -1,23 +1,21 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import {
+  Input,
+  Switch,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+  Badge,
+  Button,
+} from "spatial-grid-nav/primitives";
+import { SettingsRow } from "spatial-grid-nav/layouts";
 import type { NiriConfig, OutputConfig } from "@/lib/types";
 import { IconTrash } from "@tabler/icons-react";
 

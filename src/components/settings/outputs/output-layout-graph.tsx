@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useConfig } from "@/lib/config-context";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, Badge, Switch } from "spatial-grid-nav/primitives";
 import type { OutputConfig } from "@/lib/types";
-import { Badge } from "@/components/ui/badge";
 import { IconArrowsMove } from "@tabler/icons-react";
-import { Switch } from "@/components/ui/switch";
 
 const DEFAULT_NODE_WIDTH = 1280;
 const DEFAULT_NODE_HEIGHT = 720;

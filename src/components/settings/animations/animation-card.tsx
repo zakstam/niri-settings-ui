@@ -1,17 +1,16 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import {
+  Switch,
+  Slider,
+  Input,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import type { IndividualAnimation, AnimationKind, AnimationsConfig } from "@/lib/types";
 
 const easingCurves = [

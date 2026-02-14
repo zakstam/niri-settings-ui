@@ -1,7 +1,6 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
+import { Input } from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 
 export function StrutsSettings() {
   const { config, updateConfig } = useConfig();

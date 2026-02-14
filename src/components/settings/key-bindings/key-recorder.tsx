@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button, Badge } from "spatial-grid-nav/primitives";
 import { IconKeyboard } from "@tabler/icons-react";
 
 interface KeyRecorderProps {
@@ -111,6 +110,7 @@ export function KeyRecorder({ value, onChange }: KeyRecorderProps) {
         variant={recording ? "default" : "outline"}
         size="sm"
         onClick={() => setRecording(!recording)}
+        {...(recording && { "data-sgn-capture": "true" })}
       >
         <IconKeyboard size={14} data-icon="inline-start" />
         {recording ? "Cancel" : "Record"}

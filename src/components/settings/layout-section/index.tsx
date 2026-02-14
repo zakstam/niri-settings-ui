@@ -1,7 +1,5 @@
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
+import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { GapsSettings } from "./gaps-settings";
 import { ColumnSettings } from "./column-settings";
 import { StrutsSettings } from "./struts-settings";

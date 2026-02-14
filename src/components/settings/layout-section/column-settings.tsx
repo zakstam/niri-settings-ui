@@ -1,17 +1,16 @@
 import { useConfig } from "@/lib/config-context";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 import {
+  Input,
+  Switch,
+  Button,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "spatial-grid-nav/primitives";
+import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import type { ColumnWidth, NiriConfig } from "@/lib/types";
 
@@ -217,7 +216,7 @@ export function ColumnSettings() {
       <SettingsGroup title="Column Behavior">
         <SettingsRow label="Center Focused Column" description="Whether to center the focused column on screen">
           <Select
-            value={config.layout.centerFocusedColumn}
+            value={config.layout.centerFocusedColumn ?? undefined}
             onValueChange={(v) => { if (v) updateConfig((prev) => updateLayout(prev, { centerFocusedColumn: v })); }}
           >
             <SelectTrigger className="w-36">

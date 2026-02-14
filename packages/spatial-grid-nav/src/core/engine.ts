@@ -16,6 +16,7 @@ import {
 import { SpatialGraph } from "./graph.js";
 import { FocusManager } from "./focus.js";
 import { DOMObserver } from "./observer.js";
+import { TabIndexEnforcer } from "./tabindex-enforcer.js";
 import { resolveAction, type KeyAction } from "./keyboard.js";
 import { runMiddleware } from "./middleware.js";
 
@@ -33,6 +34,7 @@ export class NavigationEngine {
   private graph: SpatialGraph;
   private focus: FocusManager;
   private observer: DOMObserver | null = null;
+  private tabEnforcer: TabIndexEnforcer;
 
   private activeSection: string = "";
   private attached = false;
@@ -58,6 +60,7 @@ export class NavigationEngine {
 
     this.graph = new SpatialGraph(this.selectors);
     this.focus = new FocusManager(this.selectors);
+    this.tabEnforcer = new TabIndexEnforcer();
 
     this.handleKeyDown = this.onKeyDown.bind(this);
     this.handleFocusIn = this.onFocusIn.bind(this);
@@ -78,6 +81,7 @@ export class NavigationEngine {
     this.observer.observe();
 
     this.rebuildGraph();
+    this.tabEnforcer.enforce(this.getSectionScope());
   }
 
   detach(): void {
@@ -89,6 +93,7 @@ export class NavigationEngine {
 
     this.observer?.disconnect();
     this.observer = null;
+    this.tabEnforcer.restore();
   }
 
   destroy(): void {
@@ -151,13 +156,13 @@ export class NavigationEngine {
     }
   }
 
-  enterGroup(): void {
+  enterGroup(fromEnd = false): void {
     const group = this.focus.getActiveGroup();
     if (!group) return;
 
     const action = this.makeAction("enterGroup", group);
     if (this.runAction(action)) {
-      this.focus.enterGroup(group);
+      this.focus.enterGroup(group, fromEnd);
     }
   }
 
@@ -191,6 +196,7 @@ export class NavigationEngine {
     this.focus.clearActiveGroup();
     this.graph.invalidate();
     this.rebuildGraph();
+    this.tabEnforcer.enforce(this.getSectionScope());
     this.emit("sectionChange", sectionId);
   }
 
@@ -198,6 +204,7 @@ export class NavigationEngine {
     this.activeSection = sectionId;
     this.graph.invalidate();
     this.rebuildGraph();
+    this.tabEnforcer.enforce(this.getSectionScope());
 
     const entry = this.focus.getFocusHistory(sectionId);
     if (entry && document.contains(entry.groupElement as Node)) {
@@ -314,11 +321,22 @@ export class NavigationEngine {
   private onKeyDown(event: KeyboardEvent): void {
     if (!this.attached) return;
 
-    // Yield to elements with data-sgn-capture
-    if (this.graph.isCaptured(document.activeElement)) return;
-
     const action = resolveAction(event, this.keyBindings);
     if (!action) return;
+
+    // Yield to elements with data-sgn-capture (sliders, selects, etc.)
+    if (this.graph.isCaptured(document.activeElement)) return;
+
+    // For item cycling, only intercept arrows matching the group's orientation
+    if (action.type === "itemCycle") {
+      const group = this.focus.getActiveGroup();
+      if (group) {
+        const orientation = group.dataset.sgnOrientation ?? "vertical";
+        const key = event.key;
+        if (orientation === "vertical" && (key === "ArrowLeft" || key === "ArrowRight")) return;
+        if (orientation === "horizontal" && (key === "ArrowDown" || key === "ArrowUp")) return;
+      }
+    }
 
     event.preventDefault();
     event.stopPropagation();
@@ -337,8 +355,8 @@ export class NavigationEngine {
       case "sectionNav":
         this.emit("sectionNav", action.direction);
         break;
-      case "tab":
-        this.handleTab(action.forward);
+      case "itemCycle":
+        this.handleItemCycle(action.forward);
         break;
       case "escape":
         this.exitGroup();
@@ -346,23 +364,19 @@ export class NavigationEngine {
     }
   }
 
-  private handleTab(forward: boolean): void {
+  private handleItemCycle(forward: boolean): void {
     const activeGroup = this.focus.getActiveGroup();
-
     if (!activeGroup) {
-      // No active group — focus the first group
       this.focusGroup("first");
       return;
     }
 
     const isOnGroupContainer = document.activeElement === activeGroup;
     if (isOnGroupContainer) {
-      // On group container — enter it
       this.focus.enterGroup(activeGroup, !forward);
       return;
     }
 
-    // Inside a group — cycle items
     this.focus.cycleItem(activeGroup, forward);
   }
 

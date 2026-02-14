@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useConfig } from "@/lib/config-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { SettingsGroup } from "@/components/layout/settings-group";
-import { SettingsRow } from "@/components/layout/settings-row";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button, Input, Switch, Card, CardContent } from "spatial-grid-nav/primitives";
+import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash, IconEdit, IconCheck, IconX } from "@tabler/icons-react";
 
 export function StartupSection() {

@@ -1,14 +1,14 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
+  Input,
+  Button,
+  Label,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "spatial-grid-nav/primitives";
 import { IconTrash } from "@tabler/icons-react";
 import type { MatchRule } from "@/lib/types";
 

@@ -57,18 +57,6 @@ describe("resolveAction", () => {
     expect(action).toEqual({ type: "sectionNav", direction: "next" });
   });
 
-  it("resolves Tab to tab action", () => {
-    const event = new KeyboardEvent("keydown", { key: "Tab" });
-    const action = resolveAction(event, DEFAULT_KEY_BINDINGS);
-    expect(action).toEqual({ type: "tab", forward: true });
-  });
-
-  it("resolves Shift+Tab to tab backward", () => {
-    const event = new KeyboardEvent("keydown", { key: "Tab", shiftKey: true });
-    const action = resolveAction(event, DEFAULT_KEY_BINDINGS);
-    expect(action).toEqual({ type: "tab", forward: false });
-  });
-
   it("resolves Escape to escape action", () => {
     const event = new KeyboardEvent("keydown", { key: "Escape" });
     const action = resolveAction(event, DEFAULT_KEY_BINDINGS);

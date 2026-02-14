@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @import "@fontsource-variable/jetbrains-mono";
 
 @custom-variant dark (&:is(.dark *));
@@ -34,7 +33,7 @@
     --chart-3: oklch(0.55 0 0);
     --chart-4: oklch(0.40 0 0);
     --chart-5: oklch(0.30 0 0);
-    --radius: 1rem;
+    --radius: 0.625rem;
 
     /* Sidebar / Nav strip */
     --sidebar: oklch(0.12 0 0);
@@ -283,3 +282,17 @@ html, body {
     background: var(--accent-color-muted);
     color: var(--foreground);
 }
+
+/* ── Spatial grid navigation: active group styling ── */
+[data-sgn-group][data-sgn-active] {
+    outline: none;
+    outline-offset: 0;
+    box-shadow: none;
+}
+
+/* Group container itself is focused (navigated to, not entered) */
+[data-sgn-group][data-sgn-active]:focus {
+    border-color: var(--color-accent-color);
+    transform: translateY(-1px);
+}
+

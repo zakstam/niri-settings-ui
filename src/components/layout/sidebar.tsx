@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from "react";
 import niriLogo from "@/assets/niri-logo.png";
 import {
   IconKeyboard,
@@ -22,7 +22,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "spatial-grid-nav/primitives";
 
 export type Section =
   | "input"
@@ -66,6 +66,8 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   const [showLabels, setShowLabels] = useState(false);
   const [labelsFit, setLabelsFit] = useState(true);
   const navRef = useRef<HTMLElement>(null);
+  const buttonRefs = useRef<Partial<Record<Section, HTMLButtonElement | null>>>({});
+  const EDGE_PADDING = 12;
 
   // Check if nav overflows when labels are shown
   const checkOverflow = useCallback(() => {
@@ -75,12 +77,39 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   }, []);
 
   // Re-check on resize and when labels toggle
-  useEffect(() => {
+  useLayoutEffect(() => {
     checkOverflow();
     const observer = new ResizeObserver(checkOverflow);
     if (navRef.current) observer.observe(navRef.current);
     return () => observer.disconnect();
   }, [showLabels, checkOverflow]);
+
+  useEffect(() => {
+    const activeButton = buttonRefs.current[activeSection];
+    const nav = navRef.current;
+    if (!activeButton || !nav) return;
+
+    // Keep the focused section tab visible when section navigation moves it off-screen.
+    const navRect = nav.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    const currentScrollLeft = nav.scrollLeft;
+
+    const buttonLeft = buttonRect.left - navRect.left + currentScrollLeft;
+    const buttonRight = buttonLeft + buttonRect.width;
+    const visibleLeft = currentScrollLeft + EDGE_PADDING;
+    const visibleRight = currentScrollLeft + nav.clientWidth - EDGE_PADDING;
+
+    if (buttonLeft >= visibleLeft && buttonRight <= visibleRight) return;
+
+    const nextScrollLeft = Math.max(
+      0,
+      buttonLeft - (nav.clientWidth - buttonRect.width) / 2,
+    );
+    nav.scrollTo({
+      left: nextScrollLeft,
+      behavior: "smooth",
+    });
+  }, [activeSection]);
 
   // Auto-collapse labels when they no longer fit
   useEffect(() => {
@@ -98,16 +127,24 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
 
       {/* Navigation – horizontal workspace strip */}
       <TooltipProvider delay={300}>
-        <nav ref={navRef} className="flex flex-1 items-center gap-1 overflow-hidden">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            const Icon = item.icon;
+          <nav
+            ref={navRef}
+            className="no-scrollbar min-w-0 flex flex-1 items-center gap-1 overflow-x-auto overflow-y-hidden"
+          >
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              const Icon = item.icon;
             const showLabel = isActive || showLabels;
             return (
               <Tooltip key={item.id}>
                 <TooltipTrigger
                   render={
                     <button
+                      ref={(el) => {
+                        buttonRefs.current[item.id] = el;
+                      }}
+                      tabIndex={-1}
+                      aria-label={item.label}
                       onClick={() => onSectionChange(item.id)}
                       className={cn(
                         "relative flex h-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-200",
@@ -154,6 +191,8 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
         <TooltipTrigger
           render={
             <button
+              tabIndex={-1}
+              aria-label={showLabels ? "Hide labels" : "Show labels"}
               onClick={() => setShowLabels((v) => !v)}
               className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-accent/50 hover:text-foreground"
             />
