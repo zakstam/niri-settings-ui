@@ -80,28 +80,3 @@ export function findBestCandidate(
   return bestCandidate;
 }
 
-// ── Legacy helpers (used by focus.ts / index.ts until they are refactored) ──
-
-export function nextIndex(
-  currentIndex: number,
-  total: number,
-  direction: 1 | -1,
-): number {
-  if (total === 0) return -1;
-  if (currentIndex < 0) return direction === 1 ? 0 : total - 1;
-  if (direction === 1) return Math.min(total - 1, currentIndex + 1);
-  return Math.max(0, currentIndex - 1);
-}
-
-export function findAdjacentGroup(
-  currentGroup: HTMLElement,
-  groups: HTMLElement[],
-  direction: Direction,
-): HTMLElement | null {
-  const currentRect = currentGroup.getBoundingClientRect();
-  const rects = groups.map((g) => g.getBoundingClientRect());
-  const bestRect = findBestCandidate(currentRect, rects, direction);
-  if (!bestRect) return null;
-  const idx = rects.indexOf(bestRect);
-  return idx >= 0 ? groups[idx] : null;
-}
