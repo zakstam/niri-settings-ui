@@ -39,10 +39,8 @@ export function NavigationProvider({
 
     const eng = new NavigationEngine(container, config);
 
-    eng.on("willNavigate", (action) => {
-      if (action.type === "sectionChange" && action.direction) {
-        onSectionNavRef.current?.(action.direction as "next" | "prev");
-      }
+    eng.on("sectionNav", (direction) => {
+      onSectionNavRef.current?.(direction);
     });
 
     eng.on("groupChange", (group) => {

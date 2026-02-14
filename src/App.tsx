@@ -1,10 +1,11 @@
-import { useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useCallback, useLayoutEffect, useRef } from "react";
 import { animate } from "motion";
+import { NavigationProvider } from "spatial-grid-nav/react";
 import { ConfigProvider, useConfig } from "@/lib/config-context";
 import { Sidebar, navItems, type Section } from "@/components/layout/sidebar";
 import { ApplyBar } from "@/components/layout/apply-bar";
 import { ShortcutsBar } from "@/components/layout/shortcuts-bar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "spatial-grid-nav/primitives";
 import { InputSection } from "@/components/sections/input-section";
 import { OutputsSection } from "@/components/sections/outputs-section";
 import { LayoutSection } from "@/components/sections/layout-section";
@@ -16,6 +17,7 @@ import { StartupSection } from "@/components/sections/startup-section";
 import { WorkspacesSection } from "@/components/sections/workspaces-section";
 import { EventsGesturesSection } from "@/components/sections/events-gestures-section";
 import { AdvancedSection } from "@/components/sections/advanced-section";
+import type { NavigationEngine } from "spatial-grid-nav";
 
 const sectionIndex = new Map<Section, number>(
   navItems.map((item, i) => [item.id, i]),
@@ -58,11 +60,13 @@ function AppContent() {
   );
   const { isLoading, error, clearError } = useConfig();
 
+  const engineRef = useRef<NavigationEngine | null>(null);
+
   // Refs for imperative animation (avoids React inline style conflicts)
-  const sectionRefs = useRef<Partial<Record<Section, HTMLDivElement | null>>>({});
+  const sectionRefs = useRef<Partial<Record<Section, HTMLElement | null>>>({});
   const runningAnims = useRef<Partial<Record<Section, { stop: () => void }[]>>>({});
   const pendingEnter = useRef<{ section: Section; dir: number } | null>(null);
-  const initialized = useRef(false);
+  const pendingSectionGroupFocus = useRef<Section | null>(null);
 
   function stopAnims(section: Section) {
     runningAnims.current[section]?.forEach((a) => a.stop());
@@ -104,20 +108,38 @@ function AppContent() {
     [activeSection],
   );
 
-  // Initialize the first section as visible (before first paint)
-  useLayoutEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-    const el = sectionRefs.current[activeSection];
-    if (el) {
-      el.style.visibility = "visible";
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0px)";
-      el.style.pointerEvents = "auto";
-      el.style.zIndex = "1";
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const requestSectionGroupFocus = useCallback((section: Section) => {
+    pendingSectionGroupFocus.current = section;
   }, []);
+
+  // Handle section navigation events from the engine
+  const handleSectionNav = useCallback(
+    (direction: "next" | "prev") => {
+      const currentIndex = sectionIndex.get(activeSection) ?? 0;
+      const nextSectionIdx = direction === "next"
+        ? Math.min(currentIndex + 1, navItems.length - 1)
+        : Math.max(currentIndex - 1, 0);
+      if (nextSectionIdx !== currentIndex) {
+        const section = navItems[nextSectionIdx].id;
+        requestSectionGroupFocus(section);
+        handleSectionChange(section);
+      }
+    },
+    [activeSection, handleSectionChange, requestSectionGroupFocus],
+  );
+
+  // Initialize the first visible section after the config has loaded.
+  useLayoutEffect(() => {
+    if (isLoading) return;
+    const el = sectionRefs.current["input"];
+    if (!el) return;
+
+    el.style.visibility = "visible";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0px)";
+    el.style.pointerEvents = "auto";
+    el.style.zIndex = "1";
+  }, [isLoading]);
 
   // Animate the entering section after React commits (including first mount)
   useLayoutEffect(() => {
@@ -142,24 +164,28 @@ function AppContent() {
     runningAnims.current[pending.section] = [ctrl];
   });
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!e.ctrlKey) return;
-      const isNext = e.key === "ArrowDown" || e.key === "ArrowRight";
-      const isPrev = e.key === "ArrowUp" || e.key === "ArrowLeft";
-      if (!isNext && !isPrev) return;
-      e.preventDefault();
-      const currentIndex = sectionIndex.get(activeSection) ?? 0;
-      const nextIndex = isNext
-        ? Math.min(currentIndex + 1, navItems.length - 1)
-        : Math.max(currentIndex - 1, 0);
-      if (nextIndex !== currentIndex) {
-        handleSectionChange(navItems[nextIndex].id);
-      }
+  // After section change, tell the engine about the new active section and focus first group
+  useLayoutEffect(() => {
+    const sectionToFocus = pendingSectionGroupFocus.current;
+    if (!sectionToFocus) return;
+
+    const sectionRoot = sectionRefs.current[sectionToFocus];
+    if (!sectionRoot || !engineRef.current) {
+      pendingSectionGroupFocus.current = null;
+      return;
     }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSection, handleSectionChange]);
+
+    engineRef.current.setActiveSection(sectionToFocus);
+    engineRef.current.focusGroup("first");
+    pendingSectionGroupFocus.current = null;
+  }, [activeSection]);
+
+  // Keep engine active section in sync when section changes (without focus request)
+  useLayoutEffect(() => {
+    if (engineRef.current) {
+      engineRef.current.setActiveSection(activeSection);
+    }
+  }, [activeSection]);
 
   if (isLoading) {
     return (
@@ -214,27 +240,41 @@ function AppContent() {
       />
 
       {/* Main content — sections stay mounted once visited */}
-      <div className="relative flex-1 overflow-hidden">
-        {navItems.map((item) => {
-          if (!mountedSections.has(item.id)) return null;
-          return (
-            <div
-              key={item.id}
-              ref={(el) => { sectionRefs.current[item.id] = el; }}
-              className="absolute inset-0 invisible opacity-0 pointer-events-none"
-            >
-              <ScrollArea className="size-full">
-                <div className="space-y-6 px-12 py-10 pb-28">
-                  <SectionContent section={item.id} />
-                </div>
-              </ScrollArea>
-            </div>
-          );
-        })}
+      <NavigationProvider
+        engineRef={engineRef}
+        onSectionNav={handleSectionNav}
+      >
+        <main className="relative flex-1 overflow-hidden">
+          {navItems.map((item) => {
+            if (!mountedSections.has(item.id)) return null;
 
-        <ApplyBar />
-        <ShortcutsBar />
-      </div>
+            const isActive = item.id === activeSection;
+
+            return (
+              <section
+                key={item.id}
+                ref={(el) => {
+                  sectionRefs.current[item.id] = el;
+                }}
+                data-sgn-section={item.id}
+                aria-hidden={!isActive}
+                role="tabpanel"
+                tabIndex={-1}
+                className="absolute inset-0 invisible opacity-0 pointer-events-none"
+              >
+                <ScrollArea className="size-full">
+                  <div className="space-y-6 px-12 py-10 pb-28">
+                    <SectionContent section={item.id} />
+                  </div>
+                </ScrollArea>
+              </section>
+            );
+          })}
+
+          <ApplyBar />
+          <ShortcutsBar />
+        </main>
+      </NavigationProvider>
     </div>
   );
 }

@@ -42,6 +42,7 @@ export class NavigationEngine {
     willNavigate: new Set(),
     didNavigate: new Set(),
     sectionChange: new Set(),
+    sectionNav: new Set(),
     groupChange: new Set(),
     focusRestore: new Set(),
   };
@@ -334,11 +335,7 @@ export class NavigationEngine {
         this.focusGroup(action.strategy);
         break;
       case "sectionNav":
-        this.emit(
-          "willNavigate",
-          this.makeAction("sectionChange", null),
-        );
-        // Section nav is emitted as an event for the app to handle
+        this.emit("sectionNav", action.direction);
         break;
       case "tab":
         this.handleTab(action.forward);

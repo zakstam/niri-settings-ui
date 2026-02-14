@@ -92,6 +92,7 @@ export type EngineEventMap = {
   willNavigate: (action: NavigationAction) => void;
   didNavigate: (action: NavigationAction) => void;
   sectionChange: (sectionId: string) => void;
+  sectionNav: (direction: "next" | "prev") => void;
   groupChange: (group: HTMLElement | null) => void;
   focusRestore: (sectionId: string, group: HTMLElement) => void;
 };
