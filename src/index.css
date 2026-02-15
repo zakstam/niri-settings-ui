@@ -283,16 +283,18 @@ html, body {
     color: var(--foreground);
 }
 
-/* ── Spatial grid navigation: active group styling ── */
-[data-sgn-group][data-sgn-active] {
+/* ── Spatial grid navigation: explicit focus state styling ── */
+[data-sgn-group][data-sgn-active-group] {
     outline: none;
     outline-offset: 0;
-    box-shadow: none;
+    transition: transform 120ms ease, border-color 120ms ease;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px var(--color-accent-color);
+    transform: none;
 }
 
-/* Group container itself is focused (navigated to, not entered) */
-[data-sgn-group][data-sgn-active]:focus {
-    border-color: var(--color-accent-color);
-    transform: translateY(-1px);
+[data-sgn-active-item] {
+    box-shadow: 0 0 0 2px var(--color-control-ring-focus);
+    border-radius: var(--radius-md);
+    outline: none;
 }
-

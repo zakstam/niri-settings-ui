@@ -43,7 +43,7 @@ export function OutputsSection() {
       />
 
       {config.outputs.length === 0 ? (
-        <Card>
+        <Card navigable={false}>
           <CardContent className="py-12">
             <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-12">
               <p className="text-sm text-muted-foreground">

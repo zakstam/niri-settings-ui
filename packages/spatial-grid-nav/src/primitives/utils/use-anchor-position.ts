@@ -12,9 +12,21 @@ import {
 
 export type { Side, Alignment, Placement };
 
+type AnchorInput = HTMLElement | React.RefObject<HTMLElement | null> | null;
+
+function resolveAnchor(input: AnchorInput): HTMLElement | null {
+  if (!input) return null;
+
+  if ("current" in input) {
+    return input.current;
+  }
+
+  return input;
+}
+
 export interface UseAnchorPositionOptions {
-  anchor: HTMLElement | null;
-  floating: HTMLElement | null;
+  anchor: AnchorInput;
+  floating: AnchorInput;
   side?: Side;
   align?: Alignment | "center";
   sideOffset?: number;
@@ -28,6 +40,7 @@ export interface AnchorPositionResult {
   placement: Placement;
   availableHeight: number;
   anchorWidth: number;
+  ready: boolean;
 }
 
 function toPlacement(side: Side, align: Alignment | "center"): Placement {
@@ -54,16 +67,20 @@ export function useAnchorPosition(
     placement: toPlacement(side, align),
     availableHeight: 300,
     anchorWidth: 0,
+    ready: false,
   });
 
   const cleanupRef = useRef<(() => void) | null>(null);
 
   const update = useCallback(() => {
-    if (!anchor || !floating || !open) return;
+    const resolvedAnchor = resolveAnchor(anchor);
+    const resolvedFloating = resolveAnchor(floating);
+
+    if (!resolvedAnchor || !resolvedFloating || !open) return;
 
     const placement = toPlacement(side, align);
 
-    computePosition(anchor, floating, {
+    computePosition(resolvedAnchor, resolvedFloating, {
       placement,
       middleware: [
         offset({ mainAxis: sideOffset, crossAxis: alignOffset }),
@@ -72,7 +89,7 @@ export function useAnchorPosition(
         size({
           padding: 8,
           apply({ availableHeight }) {
-            Object.assign(floating.style, {
+            Object.assign(resolvedFloating.style, {
               maxHeight: `${availableHeight}px`,
             });
           },
@@ -84,13 +101,17 @@ export function useAnchorPosition(
         y,
         placement: finalPlacement,
         availableHeight: window.innerHeight - y - 8,
-        anchorWidth: anchor.offsetWidth,
+        anchorWidth: resolvedAnchor.offsetWidth,
+        ready: true,
       });
     });
   }, [anchor, floating, side, align, sideOffset, alignOffset, open]);
 
   useEffect(() => {
-    if (!anchor || !floating || !open) return;
+    if (!open) {
+      setResult((prev) => (prev.ready ? { ...prev, ready: false } : prev));
+      return;
+    }
 
     update();
 

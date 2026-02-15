@@ -5,7 +5,6 @@ import {
   useState,
   useRef,
   useCallback,
-  useEffect,
 } from "react";
 import { cn } from "./utils/cn.ts";
 import { Portal } from "./utils/portal.tsx";
@@ -37,7 +36,7 @@ function TooltipProvider({ delay = 0, children }: TooltipProviderProps) {
 interface TooltipContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
-  triggerRef: React.RefObject<HTMLElement | null>;
+  triggerRef: React.MutableRefObject<HTMLButtonElement | null>;
   delay: number;
 }
 
@@ -46,7 +45,7 @@ const TooltipContext = createContext<TooltipContextValue>({
   setOpen: () => {},
   triggerRef: { current: null },
   delay: 0,
-});
+} as TooltipContextValue);
 
 export interface TooltipProps {
   open?: boolean;
@@ -63,7 +62,7 @@ function Tooltip({
 }: TooltipProps) {
   const providerCtx = useContext(TooltipProviderContext);
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const triggerRef = useRef<HTMLElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -92,40 +91,97 @@ export interface TooltipTriggerProps extends React.ComponentProps<"button"> {
 function TooltipTrigger({ render, children, ...props }: TooltipTriggerProps) {
   const { setOpen, triggerRef, delay } = useContext(TooltipContext);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { ref: externalRef, ...triggerProps } = props as React.ComponentProps<"button"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  };
 
-  const handleEnter = useCallback(() => {
-    if (delay > 0) {
-      timerRef.current = setTimeout(() => setOpen(true), delay);
-    } else {
-      setOpen(true);
-    }
-  }, [delay, setOpen]);
+  const handleEnter = useCallback(
+    (currentTarget: HTMLButtonElement) => {
+      triggerRef.current = currentTarget;
+
+      if (delay > 0) {
+        timerRef.current = setTimeout(() => setOpen(true), delay);
+      } else {
+        setOpen(true);
+      }
+    },
+    [delay, setOpen],
+  );
 
   const handleLeave = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     setOpen(false);
   }, [setOpen]);
 
-  const triggerProps = {
+  const mergedTriggerProps = {
     "data-slot": "tooltip-trigger",
-    ref: triggerRef as React.Ref<HTMLButtonElement>,
-    onMouseEnter: handleEnter,
+    onMouseEnter: (event: React.MouseEvent<HTMLButtonElement>) =>
+      handleEnter(event.currentTarget),
     onMouseLeave: handleLeave,
-    onFocus: handleEnter,
+    onFocus: (event: React.FocusEvent<HTMLButtonElement>) =>
+      handleEnter(event.currentTarget),
     onBlur: handleLeave,
-    ...props,
+    ...triggerProps,
+  } as React.ComponentPropsWithoutRef<"button"> & {
+    "data-slot"?: string;
+  };
+
+  const mergedRef = (node: HTMLButtonElement | null) => {
+    triggerRef.current = node;
+
+    if (!externalRef) return;
+
+    if (typeof externalRef === "function") {
+      externalRef(node);
+    } else {
+      (externalRef as React.MutableRefObject<HTMLButtonElement | null>).current =
+        node;
+    }
   };
 
   if (render) {
-    return React.cloneElement(render, {
-      ...triggerProps,
-      ...render.props,
+    const renderProps = render.props as React.ComponentProps<"button"> & {
+      ref?: React.Ref<HTMLButtonElement>;
+    };
+
+    const mergedMouseEnter: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+      mergedTriggerProps.onMouseEnter?.(e);
+      renderProps.onMouseEnter?.(e);
+    };
+
+    const mergedMouseLeave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+      mergedTriggerProps.onMouseLeave?.(e);
+      renderProps.onMouseLeave?.(e);
+    };
+
+    const mergedFocus: React.FocusEventHandler<HTMLButtonElement> = (e) => {
+      mergedTriggerProps.onFocus?.(e);
+      renderProps.onFocus?.(e);
+    };
+
+    const mergedBlur: React.FocusEventHandler<HTMLButtonElement> = (e) => {
+      mergedTriggerProps.onBlur?.(e);
+      renderProps.onBlur?.(e);
+    };
+
+    return React.cloneElement(
+      render,
+      {
+        ...render.props,
+        "data-slot": "tooltip-trigger",
+        ref: mergedRef,
+        onMouseEnter: mergedMouseEnter,
+        onMouseLeave: mergedMouseLeave,
+      onFocus: mergedFocus,
+      onBlur: mergedBlur,
+      ...mergedTriggerProps,
       children: children ?? render.props.children,
-    });
+    } as unknown as React.ComponentPropsWithoutRef<"button">,
+    );
   }
 
   return (
-    <button type="button" {...triggerProps}>
+    <button type="button" ref={mergedRef} {...mergedTriggerProps}>
       {children}
     </button>
   );
@@ -150,9 +206,9 @@ function TooltipContent({
   const { open, triggerRef } = useContext(TooltipContext);
   const floatingRef = useRef<HTMLDivElement>(null);
 
-  const { x, y, placement } = useAnchorPosition({
-    anchor: triggerRef.current,
-    floating: floatingRef.current,
+  const { x, y, placement, ready } = useAnchorPosition({
+    anchor: triggerRef,
+    floating: floatingRef,
     side,
     align: align === "center" ? "center" : align,
     sideOffset,
@@ -160,7 +216,7 @@ function TooltipContent({
     open,
   });
 
-  if (!open) return null;
+  if (!open || !ready) return null;
 
   const actualSide = placement.split("-")[0];
 

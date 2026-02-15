@@ -5,6 +5,7 @@ import { PageHeader } from "spatial-grid-nav/layouts";
 import { IconPlus, IconTrash, IconEdit, IconSearch } from "@tabler/icons-react";
 import { BindingEditor } from "./binding-editor";
 import type { KeyBinding } from "@/lib/types";
+import { Kbd } from "./kbd";
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 10);
@@ -108,30 +109,33 @@ export function KeyBindingsSection() {
               </p>
             </div>
           ) : (
-            <div className="max-h-[calc(100vh-360px)] space-y-1.5 overflow-auto pr-2">
+            <div className="max-h-[calc(100vh-360px)] space-y-1.5 overflow-y-auto overflow-x-visible pr-3 pl-2 pt-2">
               {filteredBindings.map((binding) => (
                 <Card key={binding.id} size="sm">
-                  <CardContent className="flex items-center gap-3 py-2.5">
-                    <div className="flex min-w-32 flex-wrap items-center gap-1">
+                  <CardContent className="flex min-w-0 items-center gap-3 py-2.5">
+                    <div className="flex flex-none flex-wrap items-center gap-1">
                       {binding.key.split("+").map((part, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
+                        <Kbd
+                          key={i}
+                          className="h-6 min-w-6 px-2 text-xs"
+                        >
                           {part}
-                        </Badge>
+                        </Kbd>
                       ))}
                     </div>
 
-                    <div className="flex-1 truncate">
-                      <span className="text-sm font-medium">
+                    <div className="min-w-0 flex-1 truncate">
+                      <span className="inline-block max-w-full truncate text-sm font-medium">
                         {binding.action}
                       </span>
                       {binding.actionArgs.length > 0 && (
-                        <span className="ml-1.5 text-xs text-muted-foreground">
+                        <span className="ml-1.5 inline-block max-w-full truncate text-xs text-muted-foreground">
                           {binding.actionArgs.join(" ")}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex shrink-0 items-center gap-1">
+                    <div className="flex shrink-0 flex-wrap items-center justify-end gap-1">
                       {binding.allowWhenLocked && (
                         <Badge variant="outline" className="text-xs">
                           locked

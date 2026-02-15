@@ -4,16 +4,23 @@ import { cn } from "./utils/cn.ts";
 function Card({
   className,
   size = "default",
+  navigable = true,
+  tabIndex,
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: React.ComponentProps<"div"> & {
+  size?: "default" | "sm";
+  navigable?: boolean;
+}) {
+  const resolvedTabIndex = tabIndex ?? (navigable ? -1 : undefined);
+
   return (
     <div
-      data-sgn-group=""
-      tabIndex={-1}
+      data-sgn-group={navigable ? "" : undefined}
+      tabIndex={resolvedTabIndex}
       data-slot="card"
       data-size={size}
       className={cn(
-        "ring-foreground/10 bg-card text-card-foreground gap-4 overflow-hidden rounded-xl py-4 text-sm ring-1 border border-transparent transition-all duration-200 bg-card focus-within:ring-4 focus-within:ring-foreground/95 focus-within:ring-offset-2 focus-within:ring-offset-background focus-within:border-foreground/80 focus-within:bg-foreground/8 focus:ring-4 focus:ring-foreground/95 focus:ring-offset-2 focus:ring-offset-background focus:bg-foreground/8 focus-visible:ring-4 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-foreground/90 relative before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:bg-foreground before:opacity-0 before:transition-[width,opacity] before:duration-200 before:content-[''] focus-within:before:w-1.5 focus-within:before:opacity-100 focus-visible:before:w-1.5 focus-visible:before:opacity-100 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl group/card flex flex-col",
+        "ring-foreground/10 bg-card text-card-foreground gap-4 overflow-hidden rounded-xl py-4 text-sm ring-1 border border-transparent transition-all duration-200 bg-card focus-within:ring-4 focus-within:ring-foreground/95 focus-within:ring-offset-2 focus-within:ring-offset-background focus-within:border-foreground/80 focus-within:bg-foreground/8 focus:ring-4 focus:ring-foreground/95 focus:ring-offset-2 focus:ring-offset-background focus:bg-foreground/8 focus-visible:ring-4 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-foreground/90 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl group/card flex flex-col",
         className,
       )}
       {...props}

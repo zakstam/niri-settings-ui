@@ -50,6 +50,23 @@ describe("FocusManager", () => {
     expect(group.hasAttribute("data-sgn-active")).toBe(true);
   });
 
+  it("sets and moves active item marker", () => {
+    const group = addGroup("a");
+    const firstItem = addItem(group);
+    const secondItem = addItem(group);
+
+    fm.setActiveGroup(group);
+    fm.enterGroup(group);
+
+    expect(fm.getActiveItem()).toBe(firstItem);
+    expect(firstItem.hasAttribute("data-sgn-active-item")).toBe(true);
+
+    fm.cycleItem(group, true);
+    expect(fm.getActiveItem()).toBe(secondItem);
+    expect(firstItem.hasAttribute("data-sgn-active-item")).toBe(false);
+    expect(secondItem.hasAttribute("data-sgn-active-item")).toBe(true);
+  });
+
   it("removes data-sgn-active from previous group", () => {
     const a = addGroup("a");
     const b = addGroup("b");

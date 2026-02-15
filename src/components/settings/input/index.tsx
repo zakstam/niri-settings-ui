@@ -26,7 +26,10 @@ export function InputSection() {
         description="Configure keyboard, touchpad, mouse, trackpoint, and focus behavior"
       />
       <Tabs defaultValue="keyboard">
-        <NavigationGroup label="Input device tabs" orientation="horizontal" className="glass rounded-2xl border border-transparent bg-card transition-all duration-200 relative p-2">
+        <NavigationGroup
+          orientation="horizontal"
+          className="glass rounded-2xl border border-transparent bg-card transition-all duration-200 relative p-2"
+        >
           <TabsList
             variant="line"
             className="gap-0.5"

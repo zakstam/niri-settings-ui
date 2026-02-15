@@ -1,17 +1,21 @@
 import type {
+  FocusMode,
   Direction,
-  GroupStrategy,
   EngineConfig,
   EngineEvent,
   EngineEventMap,
-  NavigationAction,
-  Middleware,
-  Selectors,
+  GroupStrategy,
   KeyBindings,
+  Middleware,
+  NavigationAction,
+  NavigationFailureReason,
+  NavigationResult,
+  NavigationTuning,
+  Selectors,
 } from "./types.js";
 import {
-  DEFAULT_SELECTORS,
   DEFAULT_KEY_BINDINGS,
+  DEFAULT_SELECTORS,
 } from "./types.js";
 import { SpatialGraph } from "./graph.js";
 import { FocusManager } from "./focus.js";
@@ -30,6 +34,7 @@ export class NavigationEngine {
   private selectors: Selectors;
   private keyBindings: KeyBindings;
   private middleware: Middleware[];
+  private tuning: NavigationTuning;
 
   private graph: SpatialGraph;
   private focus: FocusManager;
@@ -47,6 +52,7 @@ export class NavigationEngine {
     sectionNav: new Set(),
     groupChange: new Set(),
     focusRestore: new Set(),
+    focusStateChange: new Set(),
   };
 
   private handleKeyDown: (e: KeyboardEvent) => void;
@@ -57,6 +63,7 @@ export class NavigationEngine {
     this.selectors = { ...DEFAULT_SELECTORS, ...config.selectors };
     this.keyBindings = { ...DEFAULT_KEY_BINDINGS, ...config.keyBindings };
     this.middleware = config.middleware ?? [];
+    this.tuning = { ...config.tuning };
 
     this.graph = new SpatialGraph(this.selectors);
     this.focus = new FocusManager(this.selectors);
@@ -107,24 +114,52 @@ export class NavigationEngine {
 
   // ── Navigation API ──
 
-  navigate(direction: Direction): void {
+  navigate(direction: Direction): NavigationResult {
+    if (!this.attached) {
+      return this.navigationFailure(null, null, "not-attached");
+    }
+
     this.ensureGraph();
     const currentGroup = this.focus.getActiveGroup();
-    if (!currentGroup) return;
+    const groups = this.graph.getGroups();
 
-    const nextGroup = this.graph.findAdjacent(currentGroup, direction);
-    if (!nextGroup) return;
+    if (groups.length === 0) {
+      return this.navigationFailure(currentGroup, null, "no-groups");
+    }
+
+    if (!currentGroup) {
+      const strategy = direction === "left" || direction === "up" ? "prev" : "next";
+      return this.focusGroup(strategy);
+    }
+
+    const nextGroup = this.graph.findAdjacent(
+      currentGroup,
+      direction,
+      this.tuning.crossAxisPenalty,
+    );
+    if (!nextGroup) {
+      return this.navigationFailure(currentGroup, null, "no-candidate");
+    }
 
     const action = this.makeAction("navigate", nextGroup, direction);
-    if (this.runAction(action)) {
-      this.activateGroup(nextGroup);
+    if (!this.runAction(action)) {
+      return this.navigationFailure(currentGroup, nextGroup, "action-blocked");
     }
+
+    if (nextGroup === currentGroup) {
+      return this.navigationFailure(currentGroup, nextGroup, "already-at-target");
+    }
+
+    this.activateGroup(nextGroup);
+    return this.navigationSuccess(currentGroup, nextGroup);
   }
 
-  focusGroup(strategy: GroupStrategy): void {
+  focusGroup(strategy: GroupStrategy): NavigationResult {
     this.ensureGraph();
     const groups = this.graph.getGroups();
-    if (groups.length === 0) return;
+    if (groups.length === 0) {
+      return this.navigationFailure(this.focus.getActiveGroup(), null, "no-groups");
+    }
 
     const current = this.focus.getActiveGroup();
     let target: HTMLElement | null = null;
@@ -148,33 +183,59 @@ export class NavigationEngine {
       }
     }
 
-    if (target) {
-      const action = this.makeAction("focusGroup", target);
-      if (this.runAction(action)) {
-        this.activateGroup(target);
-      }
+    if (!target) {
+      return this.navigationFailure(current, null, "no-group");
     }
+
+    if (target === current) {
+      return this.navigationFailure(current, target, "already-at-target");
+    }
+
+    const action = this.makeAction("focusGroup", target);
+    if (!this.runAction(action)) {
+      return this.navigationFailure(current, target, "action-blocked");
+    }
+
+    this.activateGroup(target);
+    return this.navigationSuccess(current, target);
   }
 
-  enterGroup(fromEnd = false): void {
+  enterGroup(fromEnd = false): NavigationResult {
     const group = this.focus.getActiveGroup();
-    if (!group) return;
+    if (!group) {
+      return this.navigationFailure(null, null, "no-group");
+    }
 
     const action = this.makeAction("enterGroup", group);
-    if (this.runAction(action)) {
-      this.focus.enterGroup(group, fromEnd);
+    if (!this.runAction(action)) {
+      return this.navigationFailure(group, group, "action-blocked");
     }
+
+    const entered = this.focus.enterGroup(group, fromEnd);
+    if (!entered) {
+      return this.navigationFailure(group, group, "no-candidate");
+    }
+
+    this.emitFocusStateChange("item");
+    return this.navigationSuccess(group, group);
   }
 
-  exitGroup(): void {
+  exitGroup(): NavigationResult {
     const group = this.focus.getActiveGroup();
-    if (!group) return;
+    if (!group) {
+      return this.navigationFailure(null, null, "no-group");
+    }
 
     const action = this.makeAction("exitGroup", null);
-    if (this.runAction(action)) {
-      this.focus.clearActiveGroup();
-      group.focus({ preventScroll: true });
+    if (!this.runAction(action)) {
+      return this.navigationFailure(group, null, "action-blocked");
     }
+
+    this.focus.clearActiveItem();
+    this.focus.setActiveGroup(group);
+    this.focusElement(group);
+    this.emitFocusStateChange("group");
+    return this.navigationSuccess(group, null);
   }
 
   // ── Section API ──
@@ -183,20 +244,27 @@ export class NavigationEngine {
     // Save current focus before leaving
     if (this.activeSection) {
       const group = this.focus.getActiveGroup();
+      const item = this.focus.getActiveItem() as Element | null;
       if (group) {
         this.focus.saveFocusHistory(
           this.activeSection,
           group,
-          document.activeElement as Element | null,
+          item ?? (document.activeElement as Element | null),
         );
       }
     }
 
+    if (!this.hasSection(sectionId)) {
+      return;
+    }
+
+    const section = this.getSectionScope(sectionId);
     this.activeSection = sectionId;
     this.focus.clearActiveGroup();
     this.graph.invalidate();
     this.rebuildGraph();
-    this.tabEnforcer.enforce(this.getSectionScope());
+    this.tabEnforcer.enforce(section);
+    this.emitFocusStateChange("group");
     this.emit("sectionChange", sectionId);
   }
 
@@ -208,13 +276,19 @@ export class NavigationEngine {
 
     const entry = this.focus.getFocusHistory(sectionId);
     if (entry && document.contains(entry.groupElement as Node)) {
-      this.activateGroup(entry.groupElement as HTMLElement);
+      this.activateGroupInternal(entry.groupElement as HTMLElement, {
+        persistHistory: false,
+      });
+
       if (
         entry.itemElement &&
         document.contains(entry.itemElement as Node)
       ) {
-        (entry.itemElement as HTMLElement).focus({ preventScroll: true });
+        this.focus.setActiveItem(entry.itemElement as HTMLElement);
+        this.focusElement(entry.itemElement as HTMLElement);
+        this.emitFocusStateChange("item");
       }
+
       this.emit("focusRestore", sectionId, entry.groupElement as HTMLElement);
     } else {
       this.focusGroup("first");
@@ -257,14 +331,27 @@ export class NavigationEngine {
   }
 
   private activateGroup(group: HTMLElement): void {
+    this.activateGroupInternal(group);
+  }
+
+  private activateGroupInternal(
+    group: HTMLElement,
+    options: { persistHistory?: boolean } = {},
+  ): void {
+    const previousGroup = this.focus.getActiveGroup();
     this.focus.setActiveGroup(group);
-    group.focus({ preventScroll: true });
-    this.emit("groupChange", group);
+    this.focusElement(group);
+
+    if (previousGroup !== group) {
+      this.emit("groupChange", group);
+    }
 
     // Save to history
-    if (this.activeSection) {
+    if (this.activeSection && group !== previousGroup && options.persistHistory !== false) {
       this.focus.saveFocusHistory(this.activeSection, group, null);
     }
+
+    this.emitFocusStateChange("group");
   }
 
   private makeAction(
@@ -278,7 +365,7 @@ export class NavigationEngine {
       direction,
       from: {
         group: currentGroup,
-        item: document.activeElement,
+        item: this.focus.getActiveItem() ?? (document.activeElement as Element | null),
         section: this.activeSection,
       },
       to: {
@@ -308,14 +395,43 @@ export class NavigationEngine {
     this.graph.build(scope);
   }
 
-  private getSectionScope(): HTMLElement {
-    if (this.activeSection) {
+  private getSectionScope(sectionId: string = this.activeSection): HTMLElement {
+    if (sectionId) {
       const section = this.root.querySelector<HTMLElement>(
-        `[data-sgn-section="${this.activeSection}"]`,
+        `[data-sgn-section="${sectionId}"]`,
       );
-      if (section) return section;
+      return section ?? this.root;
     }
     return this.root;
+  }
+
+  private hasSection(sectionId: string): boolean {
+    if (!sectionId) return true;
+    return this.root.querySelector(`[data-sgn-section="${sectionId}"]`) !== null;
+  }
+
+  private navigationSuccess(
+    from: Element | null,
+    to: Element | null,
+  ): NavigationResult {
+    return { moved: true, from, to };
+  }
+
+  private navigationFailure(
+    from: Element | null,
+    to: Element | null,
+    reason: NavigationFailureReason,
+  ): NavigationResult {
+    return { moved: false, from, to, reason };
+  }
+
+  private focusElement(element: HTMLElement): void {
+    const options = { preventScroll: true, focusVisible: true } as FocusOptions;
+    try {
+      element.focus(options);
+    } catch {
+      element.focus({ preventScroll: true });
+    }
   }
 
   private onKeyDown(event: KeyboardEvent): void {
@@ -371,13 +487,21 @@ export class NavigationEngine {
       return;
     }
 
+    const activeItem = this.focus.getActiveItem();
+    const activeItemInGroup = activeItem
+      ? activeItem.closest(this.selectors.group) === activeGroup
+      : false;
     const isOnGroupContainer = document.activeElement === activeGroup;
-    if (isOnGroupContainer) {
-      this.focus.enterGroup(activeGroup, !forward);
+    if (!activeItemInGroup || isOnGroupContainer) {
+      const entered = this.focus.enterGroup(activeGroup, !forward);
+      if (entered) {
+        this.emitFocusStateChange("item");
+      }
       return;
     }
 
-    this.focus.cycleItem(activeGroup, forward);
+    this.focus.cycleItem(activeGroup, forward, activeItem);
+    this.emitFocusStateChange("item");
   }
 
   private onFocusIn(event: FocusEvent): void {
@@ -387,6 +511,8 @@ export class NavigationEngine {
 
     // Find the closest group ancestor
     const group = target.closest<HTMLElement>(this.selectors.group);
+    const previousGroup = this.focus.getActiveGroup();
+    const previousItem = this.focus.getActiveItem();
     if (group && group !== this.focus.getActiveGroup()) {
       this.focus.setActiveGroup(group);
       this.emit("groupChange", group);
@@ -395,5 +521,32 @@ export class NavigationEngine {
         this.focus.saveFocusHistory(this.activeSection, group, target);
       }
     }
+
+    if (group) {
+      const item = target.matches(this.selectors.item)
+        ? target
+        : target.closest<HTMLElement>(this.selectors.item);
+      this.focus.setActiveItem(item && group.contains(item) ? item : null);
+    } else {
+      this.focus.clearActiveItem();
+      this.focus.clearActiveGroup();
+    }
+
+    if (
+      previousGroup !== this.focus.getActiveGroup() ||
+      previousItem !== this.focus.getActiveItem()
+    ) {
+      this.emitFocusStateChange(this.focus.getActiveItem() ? "item" : "group");
+    }
+  }
+
+  private emitFocusStateChange(mode: FocusMode): void {
+    this.emit(
+      "focusStateChange",
+      this.activeSection,
+      this.focus.getActiveGroup(),
+      this.focus.getActiveItem(),
+      mode,
+    );
   }
 }

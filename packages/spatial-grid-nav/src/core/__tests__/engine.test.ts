@@ -96,6 +96,29 @@ describe("NavigationEngine", () => {
     engine.detach();
   });
 
+  it("emits focusStateChange event with active item", () => {
+    const section = addSection("s1");
+    const group = addGroup(section, "g1");
+    const button = addButton(group, "one");
+    const engine = new NavigationEngine(root);
+    const handler = vi.fn();
+    engine.on("focusStateChange", handler);
+    engine.attach();
+    engine.setActiveSection("s1");
+    engine.focusGroup("first");
+    handler.mockClear();
+
+    engine.enterGroup();
+
+    expect(handler).toHaveBeenCalled();
+    const lastCall = handler.mock.calls.at(-1);
+    expect(lastCall?.[0]).toBe("s1");
+    expect(lastCall?.[1]).toBe(group);
+    expect(lastCall?.[2]).toBe(button);
+    expect(lastCall?.[3]).toBe("item");
+    engine.detach();
+  });
+
   it("runs middleware before navigation", () => {
     const section = addSection("s1");
     const top = addGroup(section, "top", 0, 0);
@@ -122,6 +145,57 @@ describe("NavigationEngine", () => {
     engine.navigate("down");
     expect(engine.getActiveGroup()).toBe(top); // didn't move
     expect(blocker).toHaveBeenCalled();
+    engine.detach();
+  });
+
+  it("returns structured result when engine is detached", () => {
+    const section = addSection("s1");
+    const top = addGroup(section, "top", 0, 0);
+    addButton(top, "a");
+
+    const engine = new NavigationEngine(top);
+    const result = engine.navigate("down");
+
+    expect(result).toEqual({
+      moved: false,
+      from: null,
+      to: null,
+      reason: "not-attached",
+    });
+  });
+
+  it("returns a no-op result when focusGroup is already at target", () => {
+    const section = addSection("s1");
+    const top = addGroup(section, "top", 0, 0);
+    addButton(top, "a");
+
+    const engine = new NavigationEngine(root);
+    engine.attach();
+    engine.setActiveSection("s1");
+    engine.focusGroup("first");
+
+    const result = engine.focusGroup("first");
+    expect(result).toEqual({
+      moved: false,
+      from: top,
+      to: top,
+      reason: "already-at-target",
+    });
+
+    engine.detach();
+  });
+
+  it("ignores unknown section IDs in setActiveSection", () => {
+    const section = addSection("s1");
+    const top = addGroup(section, "top", 0, 0);
+    addButton(top, "a");
+
+    const engine = new NavigationEngine(root);
+    engine.attach();
+    engine.setActiveSection("s1");
+    engine.setActiveSection("not-a-section");
+
+    expect(engine.getActiveSection()).toBe("s1");
     engine.detach();
   });
 

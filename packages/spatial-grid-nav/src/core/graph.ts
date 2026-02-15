@@ -1,4 +1,4 @@
-import type { Direction, Selectors } from "./types.js";
+import type { Direction, GraphNode, Selectors } from "./types.js";
 import { rectCenter, findBestCandidate } from "./spatial.js";
 
 /**
@@ -16,6 +16,23 @@ function isHidden(el: HTMLElement): boolean {
 interface CachedGroup {
   element: HTMLElement;
   rect: DOMRect;
+  center: { x: number; y: number };
+  sectionId: string | null;
+  parentGroup: HTMLElement | null;
+}
+
+function getSectionIdForGroup(element: HTMLElement, sectionSelector: string): string | null {
+  const section = element.closest<HTMLElement>(sectionSelector);
+  return section ? section.getAttribute("data-sgn-section") : null;
+}
+
+function containsPoint(point: { x: number; y: number }, rect: DOMRect): boolean {
+  return (
+    point.x >= rect.left &&
+    point.x <= rect.right &&
+    point.y >= rect.top &&
+    point.y <= rect.bottom
+  );
 }
 
 /**
@@ -33,17 +50,19 @@ export class SpatialGraph {
 
   /** Full rebuild: scan DOM and cache all group positions */
   build(scope: HTMLElement): void {
-    const elements = Array.from(
-      scope.querySelectorAll<HTMLElement>(this.selectors.group),
-    );
-
+    const elements = Array.from(scope.querySelectorAll<HTMLElement>(this.selectors.group));
     this.groups = elements
       .filter((el) => !isHidden(el))
-      .map((element) => ({
-        element,
-        rect: element.getBoundingClientRect(),
-      }));
-
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          element,
+          rect,
+          center: rectCenter(rect),
+          sectionId: getSectionIdForGroup(element, this.selectors.section),
+          parentGroup: element.parentElement,
+        };
+      });
     this.dirty = false;
   }
 
@@ -59,9 +78,7 @@ export class SpatialGraph {
 
   /** Rebuild if dirty */
   ensureFresh(scope: HTMLElement): void {
-    if (this.dirty) {
-      this.build(scope);
-    }
+    if (this.dirty) this.build(scope);
   }
 
   /** Get all cached group elements */
@@ -69,24 +86,57 @@ export class SpatialGraph {
     return this.groups.map((g) => g.element);
   }
 
-  /** Find the best adjacent group in a direction from a source group */
-  findAdjacent(from: HTMLElement, direction: Direction): HTMLElement | null {
-    const fromEntry = this.groups.find((g) => g.element === from);
-    if (!fromEntry) return null;
+  /** Get full graph nodes for inspection */
+  getNodes(): GraphNode[] {
+    return this.groups.map((entry) => ({
+      element: entry.element,
+      rect: entry.rect,
+      center: entry.center,
+      sectionId: entry.sectionId,
+      parentGroup: entry.parentGroup,
+    }));
+  }
 
-    const candidateRects = this.groups.map((g) => g.rect);
-    const bestRect = findBestCandidate(fromEntry.rect, candidateRects, direction);
+  /** Find the best adjacent group in a direction from a source group */
+  findAdjacent(
+    from: HTMLElement,
+    direction: Direction,
+    crossAxisPenalty?: number,
+  ): HTMLElement | null {
+    let fromEntry = this.groups.find((g) => g.element === from);
+    const candidateGroups = this.groups.filter((g) => g.element !== from);
+
+    if (!candidateGroups.length) return null;
+
+    if (!fromEntry) {
+      const fallbackRect = from.getBoundingClientRect();
+      const point = { x: fallbackRect.left + fallbackRect.width / 2, y: fallbackRect.top + fallbackRect.height / 2 };
+      fromEntry = this.groups.find((candidate) => containsPoint(point, candidate.rect));
+      if (!fromEntry) return candidateGroups[0]!.element;
+    }
+
+    const candidateRects = candidateGroups.map((g) => g.rect);
+    const bestRect = findBestCandidate(
+      fromEntry.rect,
+      candidateRects,
+      direction,
+      crossAxisPenalty,
+    );
     if (!bestRect) return null;
 
-    const match = this.groups.find((g) => g.rect === bestRect);
-    return match?.element ?? null;
+    const matched = candidateGroups.find((g) => g.rect === bestRect);
+    if (matched) return matched.element;
+
+    const candidateIdx = candidateRects.indexOf(bestRect);
+    const fallbackMatch = candidateGroups[candidateIdx];
+    return fallbackMatch?.element ?? null;
   }
 
   /** Find focusable items within a group */
   getItems(group: HTMLElement): HTMLElement[] {
-    return Array.from(
-      group.querySelectorAll<HTMLElement>(this.selectors.item),
-    ).filter((el) => !isHidden(el));
+    return Array.from(group.querySelectorAll<HTMLElement>(this.selectors.item)).filter(
+      (el) => !isHidden(el),
+    );
   }
 
   /** Check if any element in scope has data-sgn-capture="true" */

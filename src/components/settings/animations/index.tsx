@@ -78,7 +78,7 @@ export function AnimationsSection() {
       </SettingsGroup>
 
       {!config.animations.off && (
-        <div className="space-y-4">
+        <div className="mt-4 space-y-4">
           <AnimationCard name="workspaceSwitch" label="Workspace Switch" description="Animation when switching workspaces" />
           <AnimationCard name="windowOpen" label="Window Open" description="Animation when a window opens" />
           <AnimationCard name="windowClose" label="Window Close" description="Animation when a window closes" />

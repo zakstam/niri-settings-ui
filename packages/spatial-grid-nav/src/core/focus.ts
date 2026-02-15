@@ -1,44 +1,75 @@
 import type { Selectors, FocusHistoryEntry } from "./types.js";
 
 /**
- * Manages active group state, data attributes, and per-section
+ * Manages active group/item state, data attributes, and per-section
  * focus history for restoration.
  */
 export class FocusManager {
   private selectors: Selectors;
   private activeGroup: HTMLElement | null = null;
+  private activeItem: HTMLElement | null = null;
   private focusHistory = new Map<string, FocusHistoryEntry>();
 
   constructor(selectors: Selectors) {
     this.selectors = selectors;
   }
 
-  // ── Active Group ──
+  // ── Active Group & Item ──
 
   getActiveGroup(): HTMLElement | null {
     return this.activeGroup;
   }
 
   setActiveGroup(group: HTMLElement | null): void {
-    if (this.activeGroup === group) return;
+    if (this.activeGroup === group) {
+      if (!group) {
+        this.clearActiveItem();
+      }
+      return;
+    }
 
-    // Remove attributes from previous
+    // Remove attributes from previous group
     if (this.activeGroup) {
       this.activeGroup.removeAttribute("data-sgn-active");
+      this.activeGroup.removeAttribute("data-sgn-active-group");
       this.activeGroup.removeAttribute("data-sgn-trapped");
     }
 
+    this.clearActiveItem();
     this.activeGroup = group;
 
-    // Set attributes on new
+    // Set attributes on new group
     if (group) {
       group.setAttribute("data-sgn-active", "");
+      group.setAttribute("data-sgn-active-group", "");
       group.setAttribute("data-sgn-trapped", "");
     }
   }
 
   clearActiveGroup(): void {
     this.setActiveGroup(null);
+  }
+
+  getActiveItem(): HTMLElement | null {
+    return this.activeItem;
+  }
+
+  setActiveItem(item: HTMLElement | null): void {
+    if (this.activeItem === item) return;
+
+    if (this.activeItem) {
+      this.activeItem.removeAttribute("data-sgn-active-item");
+    }
+
+    this.activeItem = item;
+
+    if (item) {
+      item.setAttribute("data-sgn-active-item", "");
+    }
+  }
+
+  clearActiveItem(): void {
+    this.setActiveItem(null);
   }
 
   // ── Focus History ──
@@ -78,29 +109,44 @@ export class FocusManager {
     if (items.length === 0) return false;
 
     const target = fromEnd ? items[items.length - 1]! : items[0]!;
-    target.focus({ preventScroll: true });
+    this.focusItem(target);
     return true;
   }
 
   /** Cycle to next/prev item within a group */
-  cycleItem(group: HTMLElement, forward: boolean): boolean {
+  cycleItem(
+    group: HTMLElement,
+    forward: boolean,
+    fromItem?: HTMLElement | null,
+  ): boolean {
     const items = this.getItems(group);
     if (items.length === 0) return false;
 
-    const active = document.activeElement as HTMLElement;
-    const currentIndex = items.indexOf(active);
+    const preferredActive = fromItem ?? this.activeItem;
+    const currentIndex = preferredActive ? items.indexOf(preferredActive) : -1;
 
-    let nextIndex: number;
-    if (currentIndex === -1) {
-      nextIndex = forward ? 0 : items.length - 1;
-    } else {
-      nextIndex = forward
+    const nextIndex = currentIndex === -1
+      ? (forward ? 0 : items.length - 1)
+      : forward
         ? (currentIndex + 1) % items.length
         : (currentIndex - 1 + items.length) % items.length;
-    }
 
-    items[nextIndex]!.focus({ preventScroll: true });
+    this.focusItem(items[nextIndex]!);
     return true;
+  }
+
+  focusItem(item: HTMLElement): void {
+    this.setActiveItem(item);
+    this.focusElement(item);
+  }
+
+  private focusElement(element: HTMLElement): void {
+    const options = { preventScroll: true, focusVisible: true } as FocusOptions;
+    try {
+      element.focus(options);
+    } catch {
+      element.focus({ preventScroll: true });
+    }
   }
 
   // ── Helpers ──

@@ -67,6 +67,33 @@ export interface GraphNode {
   parentGroup: HTMLElement | null;
 }
 
+export type NavigationFailureReason =
+  | "not-attached"
+  | "captured"
+  | "invalid-section"
+  | "no-groups"
+  | "no-group"
+  | "no-candidate"
+  | "action-blocked"
+  | "already-at-target";
+
+export interface NavigationResult {
+  moved: boolean;
+  from: Element | null;
+  to: Element | null;
+  reason?: NavigationFailureReason;
+}
+
+export type FocusMode = "group" | "item";
+
+export interface NavigationTuning {
+  /**
+   * Controls how much cross-axis movement is allowed for directional moves.
+   * Higher values favor near-straight lines over diagonal movement.
+   */
+  crossAxisPenalty?: number;
+}
+
 // ── Navigation Actions & Middleware ──
 
 export interface NavigationEndpoint {
@@ -94,6 +121,12 @@ export type EngineEventMap = {
   sectionNav: (direction: "next" | "prev") => void;
   groupChange: (group: HTMLElement | null) => void;
   focusRestore: (sectionId: string, group: HTMLElement) => void;
+  focusStateChange: (
+    sectionId: string,
+    activeGroup: HTMLElement | null,
+    activeItem: HTMLElement | null,
+    mode: FocusMode,
+  ) => void;
 };
 
 export type EngineEvent = keyof EngineEventMap;
@@ -111,4 +144,5 @@ export interface EngineConfig {
   selectors?: Partial<Selectors>;
   keyBindings?: Partial<KeyBindings>;
   middleware?: Middleware[];
+  tuning?: NavigationTuning;
 }

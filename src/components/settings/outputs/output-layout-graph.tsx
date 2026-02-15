@@ -386,7 +386,7 @@ export function OutputLayoutGraph() {
   if (config.outputs.length === 0) return null;
 
   return (
-    <Card>
+    <Card navigable={false}>
       <CardHeader>
         <CardTitle>Monitor Layout</CardTitle>
         <p className="text-sm text-muted-foreground">
