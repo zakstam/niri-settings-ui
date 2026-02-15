@@ -1,4 +1,10 @@
-import { useState, useCallback, useLayoutEffect, useRef } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { animate } from "motion";
 import { NavigationProvider } from "spatial-grid-nav/react";
 import { ConfigProvider, useConfig } from "@/lib/config-context";
@@ -58,7 +64,8 @@ function AppContent() {
   const [mountedSections, setMountedSections] = useState<Set<Section>>(
     () => new Set<Section>(["input"]),
   );
-  const { isLoading, error, clearError } = useConfig();
+  const { isLoading, error, clearError, applyChanges, discardChanges, isDirty } =
+    useConfig();
 
   const engineRef = useRef<NavigationEngine | null>(null);
 
@@ -111,6 +118,31 @@ function AppContent() {
   const requestSectionGroupFocus = useCallback((section: Section) => {
     pendingSectionGroupFocus.current = section;
   }, []);
+
+  useEffect(() => {
+    const handleGlobalShortcut = (event: KeyboardEvent) => {
+      if (!event.ctrlKey && !event.metaKey) return;
+      if (event.altKey || event.shiftKey) return;
+
+      const key = event.key.toLowerCase();
+      if (key === "s") {
+        event.preventDefault();
+        if (!isDirty) return;
+        void applyChanges();
+        return;
+      }
+
+      if (key === "d") {
+        event.preventDefault();
+        discardChanges();
+      }
+    };
+
+    document.addEventListener("keydown", handleGlobalShortcut, true);
+    return () => {
+      document.removeEventListener("keydown", handleGlobalShortcut, true);
+    };
+  }, [applyChanges, discardChanges, isDirty]);
 
   const scrollSectionToTop = useCallback((section: Section) => {
     const sectionRoot = sectionRefs.current[section];
@@ -232,7 +264,7 @@ function AppContent() {
     runningAnims.current[pending.section] = [ctrl];
   });
 
-  // Sync engine active section and optionally focus the first group
+  // Sync engine active section and restore focus in the newly visible section
   useLayoutEffect(() => {
     if (!engineRef.current) return;
 
@@ -241,12 +273,12 @@ function AppContent() {
       const sectionRoot = sectionRefs.current[sectionToFocus];
       if (sectionRoot) {
         engineRef.current.setActiveSection(sectionToFocus);
-        engineRef.current.focusGroup("first");
+        engineRef.current.restoreFocus(sectionToFocus);
         scrollSectionToTop(sectionToFocus);
       }
       pendingSectionGroupFocus.current = null;
     } else {
-      engineRef.current.setActiveSection(activeSection);
+      engineRef.current.restoreFocus(activeSection);
       scrollSectionToTop(activeSection);
     }
   }, [activeSection, scrollSectionToTop]);
