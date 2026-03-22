@@ -37,10 +37,7 @@ export function OutputsSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Outputs"
-        description="Configure connected displays, their resolution, scale, and position"
-      />
+      <PageHeader title="Outputs" />
 
       {config.outputs.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-8">

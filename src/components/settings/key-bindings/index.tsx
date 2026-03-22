@@ -74,10 +74,7 @@ export function KeyBindingsSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Key Bindings"
-        description="Configure keyboard shortcuts for niri actions"
-      />
+      <PageHeader title="Key Bindings" />
 
       <Card>
         <CardContent className="space-y-4">

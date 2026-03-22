@@ -23,10 +23,7 @@ import {
 export function InputSection() {
   return (
     <div>
-      <PageHeader
-        title="Input"
-        description="Configure keyboard, touchpad, mouse, trackpoint, and focus behavior"
-      />
+      <PageHeader title="Input" />
       <Tabs defaultValue="keyboard">
         <NavigationGroup
           orientation="horizontal"

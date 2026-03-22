@@ -10,10 +10,7 @@ export function AnimationsSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Animations"
-        description="Control window and workspace transition animations"
-      />
+      <PageHeader title="Animations" />
 
       <div className="space-y-6">
         <SettingsGroup title="Animation Settings">

@@ -8,10 +8,7 @@ import { InsertHintSettings } from "./insert-hint-settings";
 export function AppearanceSection() {
   return (
     <div>
-      <PageHeader
-        title="Appearance"
-        description="Configure focus ring, borders, shadows, and visual indicators"
-      />
+      <PageHeader title="Appearance" />
       <div className="space-y-6">
         <RingSettings />
         <BorderSettings />

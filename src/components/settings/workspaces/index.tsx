@@ -76,10 +76,7 @@ export function WorkspacesSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Workspaces"
-        description="Configure named workspaces and their output assignments"
-      />
+      <PageHeader title="Workspaces" />
 
       <SettingsGroup
         title="Named Workspaces"

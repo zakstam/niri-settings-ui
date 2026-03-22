@@ -209,10 +209,7 @@ export function EventsGesturesSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Events & Gestures"
-        description="Configure switch events, edge gestures, hot corners, and overview settings"
-      />
+      <PageHeader title="Events & Gestures" />
 
       <div className="space-y-6">
         <SettingsGroup

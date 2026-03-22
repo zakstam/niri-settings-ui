@@ -106,10 +106,7 @@ export function WindowRulesSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Window Rules"
-        description="Configure rules that apply to windows matching specific criteria"
-      />
+      <PageHeader title="Window Rules" />
 
       {config.windowRules.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-8">

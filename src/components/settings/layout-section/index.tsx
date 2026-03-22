@@ -10,10 +10,7 @@ export function LayoutSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Layout"
-        description="Configure window gaps, column behavior, and workspace struts"
-      />
+      <PageHeader title="Layout" />
       <div className="space-y-6">
         <GapsSettings />
         <ColumnSettings />

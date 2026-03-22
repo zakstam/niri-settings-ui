@@ -169,10 +169,7 @@ export function StartupSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Startup"
-        description="Configure programs to launch at startup and other startup options"
-      />
+      <PageHeader title="Startup" />
 
       <div className="space-y-6">
         <SettingsGroup

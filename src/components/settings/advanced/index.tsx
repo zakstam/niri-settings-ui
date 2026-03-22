@@ -40,10 +40,7 @@ export function AdvancedSection() {
 
   return (
     <div>
-      <PageHeader
-        title="Advanced"
-        description="Layer rules and other advanced configuration"
-      />
+      <PageHeader title="Advanced" />
 
       <div className="space-y-6">
         <SettingsGroup
