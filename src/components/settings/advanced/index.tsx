@@ -48,7 +48,6 @@ export function AdvancedSection() {
       <div className="space-y-6">
         <SettingsGroup
           title="Layer Rules"
-          description="Configure rules for layer-shell surfaces"
         >
           {config.layerRules.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-8">
@@ -102,7 +101,7 @@ export function AdvancedSection() {
           </div>
         </SettingsGroup>
 
-        <SettingsGroup title="Cursor" description="Mouse cursor appearance and behavior">
+        <SettingsGroup title="Cursor">
           <SettingsRow label="Theme" description="XCursor theme name">
             <Input
               value={config.cursor.xcursorTheme ?? ""}
@@ -171,7 +170,7 @@ export function AdvancedSection() {
           </SettingsRow>
         </SettingsGroup>
 
-        <SettingsGroup title="Clipboard" description="Clipboard behavior settings">
+        <SettingsGroup title="Clipboard">
           <SettingsRow label="Disable Primary Selection" description="Prevent middle-click paste from the selection clipboard">
             <Switch
               checked={config.clipboard.disablePrimary}
@@ -185,7 +184,7 @@ export function AdvancedSection() {
           </SettingsRow>
         </SettingsGroup>
 
-        <SettingsGroup title="Xwayland Satellite" description="Xwayland compatibility layer settings">
+        <SettingsGroup title="Xwayland Satellite">
           <SettingsRow label="Path" description="Path to the xwayland-satellite binary">
             <Input
               value={config.xwaylandSatellite.path ?? ""}
@@ -204,7 +203,7 @@ export function AdvancedSection() {
           </SettingsRow>
         </SettingsGroup>
 
-        <SettingsGroup title="Config Notification" description="Notification shown when config is reloaded">
+        <SettingsGroup title="Config Notification">
           <SettingsRow label="Disable Failed Notification" description="Do not show a notification when config reload fails">
             <Switch
               checked={config.configNotification.disableFailed}
@@ -218,7 +217,7 @@ export function AdvancedSection() {
           </SettingsRow>
         </SettingsGroup>
 
-        <SettingsGroup title="Hotkey Overlay" description="The hotkey overlay shown at startup">
+        <SettingsGroup title="Hotkey Overlay">
           <SettingsRow label="Skip at Startup" description={"Don't show the \"Important Hotkeys\" popup at startup"}>
             <Switch
               checked={config.hotkeyOverlay.skipAtStartup}
@@ -246,7 +245,6 @@ export function AdvancedSection() {
 
         <SettingsGroup
           title="Raw Configuration"
-          description="Some settings can only be edited directly in the config file"
         >
           <Separator className="my-2" />
           <Textarea

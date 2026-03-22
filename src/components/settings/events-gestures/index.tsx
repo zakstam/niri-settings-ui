@@ -83,12 +83,10 @@ function SwitchEventRow({
 
 function EdgeGestureSettings({
   title,
-  description,
   value,
   onChange,
 }: {
   title: string;
-  description: string;
   value: EdgeGestureConfig | null;
   onChange: (v: EdgeGestureConfig | null) => void;
 }) {
@@ -96,7 +94,7 @@ function EdgeGestureSettings({
   const cfg = value ?? { triggerWidth: null, triggerHeight: null, delayMs: null, maxSpeed: null };
 
   return (
-    <SettingsGroup title={title} description={description}>
+    <SettingsGroup title={title}>
       <SettingsRow label="Enable" description="Enable this edge gesture">
         <Switch
           checked={enabled}
@@ -219,7 +217,6 @@ export function EventsGesturesSection() {
       <div className="space-y-6">
         <SettingsGroup
           title="Switch Events"
-          description="Commands to run on lid and tablet mode events"
         >
           <SwitchEventRow
             label="Lid Close"
@@ -261,7 +258,6 @@ export function EventsGesturesSection() {
 
         <EdgeGestureSettings
           title="DnD Edge View Scroll"
-          description="Drag-and-drop edge scrolling for view movement"
           value={config.gestures.dndEdgeViewScroll}
           onChange={(v) =>
             updateConfig((prev) =>
@@ -272,7 +268,6 @@ export function EventsGesturesSection() {
 
         <EdgeGestureSettings
           title="DnD Edge Workspace Switch"
-          description="Drag-and-drop edge scrolling for workspace switching"
           value={config.gestures.dndEdgeWorkspaceSwitch}
           onChange={(v) =>
             updateConfig((prev) =>
@@ -283,7 +278,6 @@ export function EventsGesturesSection() {
 
         <SettingsGroup
           title="Hot Corners"
-          description="Enable overview activation from screen corners"
         >
           <SettingsRow label="Enable Hot Corners" description="Activate overview from screen corners">
             <Switch
@@ -324,7 +318,6 @@ export function EventsGesturesSection() {
 
         <SettingsGroup
           title="Overview"
-          description="Appearance settings for the overview mode"
         >
           <SettingsRow label="Zoom" description="Overview zoom level (0.1 to 2.0)">
             <div className="flex items-center gap-3">

@@ -54,10 +54,7 @@ export function ApplyBar() {
           : "pointer-events-none translate-y-full opacity-0",
       )}
     >
-      {/* Warm accent line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-accent-color/30 to-transparent" />
-
-      <div className="glass-surface border-t border-glass-border px-6 py-3.5">
+      <div className="border-t border-border bg-sidebar px-6 py-3.5">
         <div className="flex items-center justify-end gap-3">
           <div className="mr-auto flex items-center gap-2">
             <div className="size-1.5 rounded-full bg-accent-color" />

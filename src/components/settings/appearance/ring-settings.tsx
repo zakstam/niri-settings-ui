@@ -43,7 +43,7 @@ export function RingSettings() {
   const ring = config.layout.focusRing;
 
   return (
-    <SettingsGroup title="Focus Ring" description="Visual indicator around the focused window">
+    <SettingsGroup title="Focus Ring">
       <SettingsRow label="Disable Focus Ring" description="Hide the focus ring entirely">
         <Switch
           checked={ring.off}

@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Monochrome: clean, neutral, frosted glass ── */
+/* ── Monochrome: clean, neutral ── */
 
 :root {
     color-scheme: dark;
@@ -51,14 +51,6 @@
     --accent-color-muted: oklch(0.80 0 0 / 15%);
     --accent-color-subtle: oklch(0.80 0 0 / 8%);
 
-    /* Glass tokens */
-    --glass-bg: oklch(0.18 0 0 / 45%);
-    --glass-border: oklch(1 0 0 / 10%);
-
-    /* Background glow orbs */
-    --glow-1: oklch(0.20 0 0 / 45%);
-    --glow-2: oklch(0.17 0 0 / 35%);
-
     /* Control surfaces */
     --control-bg: oklch(0.15 0 0 / 50%);
     --control-border: oklch(1 0 0 / 12%);
@@ -103,11 +95,6 @@
         --accent-color: oklch(0.35 0 0);
         --accent-color-muted: oklch(0.35 0 0 / 12%);
         --accent-color-subtle: oklch(0.35 0 0 / 6%);
-        --glass-bg: oklch(1 0 0 / 60%);
-        --glass-border: oklch(0 0 0 / 10%);
-        --glow-1: oklch(0.92 0 0 / 50%);
-        --glow-2: oklch(0.90 0 0 / 40%);
-
         /* Control surfaces */
         --control-bg: oklch(0.96 0 0 / 60%);
         --control-border: oklch(0 0 0 / 12%);
@@ -120,7 +107,7 @@
 }
 
 @theme inline {
-    --font-sans: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -164,8 +151,6 @@
     --color-accent-color: var(--accent-color);
     --color-accent-color-muted: var(--accent-color-muted);
     --color-accent-color-subtle: var(--accent-color-subtle);
-    --color-glass-bg: var(--glass-bg);
-    --color-glass-border: var(--glass-border);
     --color-control-bg: var(--control-bg);
     --color-control-border: var(--control-border);
     --color-control-border-focus: var(--control-border-focus);
@@ -187,42 +172,6 @@
     }
 }
 
-/* ── Background glow orbs for frosted glass depth ── */
-body {
-    background-image:
-        radial-gradient(ellipse 800px 600px at 8% 12%, var(--glow-1) 0%, transparent 70%),
-        radial-gradient(ellipse 600px 500px at 92% 88%, var(--glow-2) 0%, transparent 70%);
-    background-attachment: fixed;
-}
-
-/* ── Glass surface utilities ── */
-.glass {
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(1.15);
-    backdrop-filter: blur(20px) saturate(1.15);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-        0 1px 2px oklch(0 0 0 / 4%),
-        0 4px 16px oklch(0 0 0 / 4%);
-}
-
-.glass-surface {
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
-    backdrop-filter: blur(24px) saturate(1.2);
-}
-
-@supports not (backdrop-filter: blur(1px)) {
-    .glass {
-        background: var(--card);
-        border: 1px solid var(--border);
-        box-shadow: 0 1px 3px oklch(0 0 0 / 6%);
-    }
-    .glass-surface {
-        background: var(--card);
-    }
-}
-
 /* ── Control surface utilities ── */
 .control-inset {
     box-shadow: inset 0 1px 2px oklch(0 0 0 / 15%);
@@ -237,18 +186,6 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
     display: none;
-}
-
-/* ── Grain texture ── */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.018;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 256px;
 }
 
 /* ── Scrollbar ── */

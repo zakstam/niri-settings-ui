@@ -36,7 +36,6 @@ export function InsertHintSettings() {
   return (
     <SettingsGroup
       title="Insert Hint"
-      description="Visual hint showing where a new window will be inserted"
     >
       <SettingsRow label="Disable Insert Hint" description="Hide the insert window hint">
         <Switch

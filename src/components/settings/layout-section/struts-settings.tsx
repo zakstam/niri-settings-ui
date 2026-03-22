@@ -22,7 +22,6 @@ export function StrutsSettings() {
   return (
     <SettingsGroup
       title="Struts"
-      description="Reserved space on workspace edges where windows will not be placed"
     >
       <SettingsRow label="Left" description="Reserved space on the left edge in pixels">
         <Input

@@ -20,7 +20,7 @@ export function LayoutSection() {
         <StrutsSettings />
 
         {config && (
-          <SettingsGroup title="Background" description="Background color for the layout">
+          <SettingsGroup title="Background">
             <SettingsRow label="Background Color" description="Color shown behind windows">
               <ColorEditor
                 value={config.layout.backgroundColor}

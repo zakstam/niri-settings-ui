@@ -8,7 +8,7 @@ export function GapsSettings() {
   if (!config) return null;
 
   return (
-    <SettingsGroup title="Gaps" description="Space between windows in pixels">
+    <SettingsGroup title="Gaps">
       <SettingsRow label="Gap Size" description="Pixel gap between tiled windows and around the workspace edges">
         <div className="flex items-center gap-3">
           <Slider

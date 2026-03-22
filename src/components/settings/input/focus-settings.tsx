@@ -20,7 +20,7 @@ export function FocusSettings() {
 
   return (
     <div className="space-y-6">
-      <SettingsGroup title="Focus Behavior" description="Configure how window focus follows the mouse">
+      <SettingsGroup title="Focus Behavior">
         <SettingsRow label="Warp Mouse to Focus" description="Move the mouse cursor to the newly focused window">
           <Switch
             checked={config.input.warpMouseToFocus}
@@ -74,7 +74,7 @@ export function FocusSettings() {
         )}
       </SettingsGroup>
 
-      <SettingsGroup title="Input Options" description="Additional input behavior settings">
+      <SettingsGroup title="Input Options">
         <SettingsRow label="Disable Power Key Handling" description="Prevent niri from handling the power key">
           <Switch
             checked={config.input.disablePowerKeyHandling}

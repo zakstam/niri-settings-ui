@@ -20,7 +20,7 @@ export function KeyboardSettings() {
 
   return (
     <div className="space-y-6">
-      <SettingsGroup title="XKB Configuration" description="X keyboard extension layout settings">
+      <SettingsGroup title="XKB Configuration">
         <SettingsRow label="Layout" description="Keyboard layout (e.g. us, de, fr)">
           <Input
             value={xkb.layout ?? ""}

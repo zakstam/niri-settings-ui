@@ -119,7 +119,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   }, [labelsFit, showLabels]);
 
   return (
-    <header className="glass-surface flex h-14 w-full shrink-0 items-center border-b border-glass-border px-4 gap-3">
+    <header className="flex h-14 w-full shrink-0 items-center border-b border-border bg-sidebar px-4 gap-3">
       {/* App mark */}
       <img src={niriLogo} alt="niri" className="size-9 rounded-lg select-none" draggable={false} />
 

@@ -23,10 +23,9 @@ const easingCurves = [
 interface AnimationCardProps {
   name: string;
   label: string;
-  description: string;
 }
 
-export function AnimationCard({ name, label, description }: AnimationCardProps) {
+export function AnimationCard({ name, label }: AnimationCardProps) {
   const { config, updateConfig } = useConfig();
 
   if (!config) return null;
@@ -93,7 +92,7 @@ export function AnimationCard({ name, label, description }: AnimationCardProps) 
   }
 
   return (
-    <SettingsGroup title={label} description={description}>
+    <SettingsGroup title={label}>
       <SettingsRow label="Override" description="Use custom animation instead of default">
         <Switch checked={enabled} onCheckedChange={setEnabled} />
       </SettingsRow>

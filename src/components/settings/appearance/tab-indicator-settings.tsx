@@ -48,7 +48,7 @@ export function TabIndicatorSettings() {
   const indicator = config.layout.tabIndicator;
 
   return (
-    <SettingsGroup title="Tab Indicator" description="Visual indicator for tabbed column display">
+    <SettingsGroup title="Tab Indicator">
       <SettingsRow label="Disable Tab Indicator" description="Hide the tab indicator">
         <Switch
           checked={indicator.off}

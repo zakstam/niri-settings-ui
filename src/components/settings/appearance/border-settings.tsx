@@ -43,7 +43,7 @@ export function BorderSettings() {
   const border = config.layout.border;
 
   return (
-    <SettingsGroup title="Window Border" description="Border drawn around windows">
+    <SettingsGroup title="Window Border">
       <SettingsRow label="Disable Border" description="Hide window borders entirely">
         <Switch
           checked={border.off}

@@ -25,7 +25,7 @@ export function ShadowSettings() {
   const shadow = config.layout.shadow;
 
   return (
-    <SettingsGroup title="Window Shadow" description="Drop shadow behind windows">
+    <SettingsGroup title="Window Shadow">
       <SettingsRow label="Enable Shadow" description="Draw a drop shadow behind windows">
         <Switch
           checked={shadow.on}

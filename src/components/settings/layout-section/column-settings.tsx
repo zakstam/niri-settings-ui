@@ -238,7 +238,6 @@ export function ColumnSettings() {
 
       <SettingsGroup
         title="Preset Column Widths"
-        description="Predefined widths that you can cycle through with a keybinding"
       >
         <ColumnWidthEditor
           label="Column Width Presets"
@@ -251,7 +250,6 @@ export function ColumnSettings() {
 
       <SettingsGroup
         title="Preset Window Heights"
-        description="Predefined heights that you can cycle through with a keybinding"
       >
         <ColumnWidthEditor
           label="Window Height Presets"
@@ -262,7 +260,7 @@ export function ColumnSettings() {
         />
       </SettingsGroup>
 
-      <SettingsGroup title="Default Column Width" description="Width of newly opened columns">
+      <SettingsGroup title="Default Column Width">
         <DefaultWidthEditor
           value={config.layout.defaultColumnWidth}
           onChange={(v) =>

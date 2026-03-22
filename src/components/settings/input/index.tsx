@@ -16,6 +16,8 @@ import {
   IconCircleDot,
   IconFocus2,
   IconDeviceTablet,
+  IconBallBowling,
+  IconHandClick,
 } from "@tabler/icons-react";
 
 export function InputSection() {
@@ -28,7 +30,7 @@ export function InputSection() {
       <Tabs defaultValue="keyboard">
         <NavigationGroup
           orientation="horizontal"
-          className="glass rounded-2xl border border-transparent bg-card transition-all duration-200 relative p-2"
+          className="rounded-xl border border-border bg-card transition-all duration-200 relative p-2"
         >
           <TabsList
             variant="line"
@@ -55,7 +57,7 @@ export function InputSection() {
               Focus
             </TabsTrigger>
             <TabsTrigger value="trackball">
-              <IconCircleDot size={16} />
+              <IconBallBowling size={16} />
               Trackball
             </TabsTrigger>
             <TabsTrigger value="tablet">
@@ -63,7 +65,7 @@ export function InputSection() {
               Tablet
             </TabsTrigger>
             <TabsTrigger value="touch">
-              <IconHandFinger size={16} />
+              <IconHandClick size={16} />
               Touch
             </TabsTrigger>
           </TabsList>

@@ -177,7 +177,6 @@ export function StartupSection() {
       <div className="space-y-6">
         <SettingsGroup
           title="Spawn at Startup"
-          description="Programs that run when niri starts"
         >
           {config.spawnAtStartup.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-8">
@@ -305,7 +304,6 @@ export function StartupSection() {
 
         <SettingsGroup
           title="Shell Startup Commands"
-          description="Shell commands that run when niri starts (executed via sh -c)"
         >
           {config.spawnShAtStartup.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-8">
@@ -388,7 +386,6 @@ export function StartupSection() {
 
         <SettingsGroup
           title="Environment Variables"
-          description="Environment variables set for spawned processes"
         >
           {config.environment.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-8">

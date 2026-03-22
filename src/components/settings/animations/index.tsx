@@ -80,17 +80,17 @@ export function AnimationsSection() {
 
         {!config.animations.off && (
           <>
-            <AnimationCard name="workspaceSwitch" label="Workspace Switch" description="Animation when switching workspaces" />
-            <AnimationCard name="windowOpen" label="Window Open" description="Animation when a window opens" />
-            <AnimationCard name="windowClose" label="Window Close" description="Animation when a window closes" />
-            <AnimationCard name="horizontalViewMovement" label="Horizontal View Movement" description="Animation for horizontal view scrolling" />
-            <AnimationCard name="windowMovement" label="Window Movement" description="Animation when moving windows" />
-            <AnimationCard name="windowResize" label="Window Resize" description="Animation when resizing windows" />
-            <AnimationCard name="configNotificationOpenClose" label="Config Notification" description="Animation for config notification popup" />
-            <AnimationCard name="exitConfirmationOpenClose" label="Exit Confirmation" description="Animation for exit confirmation dialog" />
-            <AnimationCard name="screenshotUiOpen" label="Screenshot UI" description="Animation for screenshot UI" />
-            <AnimationCard name="overviewOpenClose" label="Overview" description="Animation for overview mode" />
-            <AnimationCard name="recentWindowsClose" label="Recent Windows Close" description="Animation for recent windows closing" />
+            <AnimationCard name="workspaceSwitch" label="Workspace Switch" />
+            <AnimationCard name="windowOpen" label="Window Open" />
+            <AnimationCard name="windowClose" label="Window Close" />
+            <AnimationCard name="horizontalViewMovement" label="Horizontal View Movement" />
+            <AnimationCard name="windowMovement" label="Window Movement" />
+            <AnimationCard name="windowResize" label="Window Resize" />
+            <AnimationCard name="configNotificationOpenClose" label="Config Notification" />
+            <AnimationCard name="exitConfirmationOpenClose" label="Exit Confirmation" />
+            <AnimationCard name="screenshotUiOpen" label="Screenshot UI" />
+            <AnimationCard name="overviewOpenClose" label="Overview" />
+            <AnimationCard name="recentWindowsClose" label="Recent Windows Close" />
           </>
         )}
       </div>

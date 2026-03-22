@@ -297,7 +297,7 @@ function AppContent() {
         <div className="flex flex-col items-center gap-5">
           <div className="size-9 rounded-full border-2 border-muted border-t-primary animate-spin" />
           <div className="text-center">
-            <p className="text-sm font-bold text-foreground">
+            <p className="text-sm font-semibold text-foreground">
               Niri Settings
             </p>
             <p className="mt-1 text-[11px] text-muted-foreground">
@@ -313,11 +313,11 @@ function AppContent() {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
         <div className="max-w-sm space-y-4 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-destructive/15">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-destructive/15">
             <span className="text-lg text-destructive">!</span>
           </div>
           <div>
-            <h2 className="text-base font-bold text-foreground">
+            <h2 className="text-base font-semibold text-foreground">
               Failed to load configuration
             </h2>
             <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">

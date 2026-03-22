@@ -12,7 +12,7 @@ export function SettingsRow({
   children,
 }: SettingsRowProps) {
   return (
-    <div className="group flex items-center justify-between gap-10 rounded-xl px-4 py-3.5 transition-colors hover:bg-accent-color-subtle">
+    <div className="group flex items-center justify-between gap-10 border-b border-border last:border-b-0 px-4 py-3 transition-colors">
       <div className="min-w-0 flex-1">
         <div className="text-[13px] text-foreground">{label}</div>
         {description && (
