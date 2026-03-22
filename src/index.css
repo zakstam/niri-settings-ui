@@ -220,6 +220,12 @@ html, body {
     color: var(--foreground);
 }
 
+/* ── Pulse animation for unsaved indicator ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
 /* ── Spatial grid navigation: explicit focus state styling ── */
 [data-sgn-group][data-sgn-active-group] {
     outline: none;

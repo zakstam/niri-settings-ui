@@ -54,11 +54,11 @@ export function ApplyBar() {
           : "pointer-events-none translate-y-full opacity-0",
       )}
     >
-      <div className="border-t border-border bg-sidebar px-6 py-3.5">
+      <div className="border-t border-accent-color-muted bg-accent-color-subtle px-6 py-3.5">
         <div className="flex items-center justify-end gap-3">
           <div className="mr-auto flex items-center gap-2">
-            <div className="size-1.5 rounded-full bg-accent-color" />
-            <span className="text-[11px] font-medium text-muted-foreground">
+            <div className="size-1.5 rounded-full bg-accent-color animate-[pulse-dot_2s_ease-in-out_infinite]" />
+            <span className="text-[11px] font-medium text-accent-color/80">
               Unsaved changes
             </span>
           </div>
@@ -123,6 +123,7 @@ export function ApplyBar() {
             tabIndex={-1}
             onClick={() => void handleApply()}
             disabled={isApplying}
+            className="bg-accent-color text-white hover:bg-accent-color/90"
           >
             <IconCheck size={14} />
             {isApplying ? "Applying..." : "Apply"}
