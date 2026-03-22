@@ -1,18 +1,10 @@
 import { useConfig } from "@/lib/config-context";
-import {
-  Input,
-  Switch,
-  Slider,
-  Button,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "spatial-grid-nav/primitives";
+import { Switch } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
-import { IconChevronDown } from "@tabler/icons-react";
+import { SliderInput } from "@/lib/slider-input";
 import { ColorEditor } from "./color-editor";
-import { GradientEditor } from "./gradient-editor";
-import type { NiriConfig, RingBorderConfig, GradientConfig } from "@/lib/types";
+import { GradientOptionsSection } from "./gradient-options-section";
+import type { NiriConfig, RingBorderConfig } from "@/lib/types";
 
 function updateFocusRing(
   prev: NiriConfig,
@@ -26,14 +18,6 @@ function updateFocusRing(
     },
   };
 }
-
-const defaultGradient: GradientConfig = {
-  fromColor: "#ff0000",
-  toColor: "#0000ff",
-  angle: 180,
-  relativeTo: null,
-  colorSpace: null,
-};
 
 export function RingSettings() {
   const { config, updateConfig } = useConfig();
@@ -56,30 +40,15 @@ export function RingSettings() {
       {!ring.off && (
         <>
           <SettingsRow label="Width" description="Thickness of the focus ring in pixels">
-            <div className="flex items-center gap-3">
-              <Slider
-                value={[ring.width ?? 0]}
-                min={0}
-                max={20}
-                step={1}
-                onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val;
-                  updateConfig((prev) => updateFocusRing(prev, { width: v }));
-                }}
-                className="w-32"
-              />
-              <Input
-                type="number"
-                value={ring.width ?? ""}
-                min={0}
-                max={20}
-                className="w-20"
-                onChange={(e) =>
-                  updateConfig((prev) =>
-                    updateFocusRing(prev, { width: Number(e.target.value) || 0 }),
-                  )
-                }
-              />
-            </div>
+            <SliderInput
+              value={ring.width ?? 0}
+              min={0}
+              max={20}
+              step={1}
+              onValueChange={(v) =>
+                updateConfig((prev) => updateFocusRing(prev, { width: v }))
+              }
+            />
           </SettingsRow>
 
           <SettingsRow label="Active Color" description="Color of the ring on the focused window">
@@ -100,101 +69,21 @@ export function RingSettings() {
             />
           </SettingsRow>
 
-          <Collapsible>
-            <CollapsibleTrigger
-              render={<Button variant="ghost" size="sm" className="w-full justify-between" />}
-            >
-              Gradient Options
-              <IconChevronDown size={16} />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="pt-1">
-                <SettingsRow
-                  label="Active Gradient"
-                  description="Gradient overlay on the focused window ring"
-                >
-                  <Switch
-                    checked={ring.activeGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateFocusRing(prev, {
-                          activeGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {ring.activeGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={ring.activeGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, { activeGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-
-                <SettingsRow
-                  label="Inactive Gradient"
-                  description="Gradient overlay on unfocused window rings"
-                >
-                  <Switch
-                    checked={ring.inactiveGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateFocusRing(prev, {
-                          inactiveGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {ring.inactiveGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={ring.inactiveGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, { inactiveGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-
-                <SettingsRow
-                  label="Urgent Gradient"
-                  description="Gradient overlay on urgent window rings"
-                >
-                  <Switch
-                    checked={ring.urgentGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateFocusRing(prev, {
-                          urgentGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {ring.urgentGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={ring.urgentGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, { urgentGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+          <GradientOptionsSection
+            subject="ring"
+            activeGradient={ring.activeGradient}
+            inactiveGradient={ring.inactiveGradient}
+            urgentGradient={ring.urgentGradient}
+            onActiveGradientChange={(v) =>
+              updateConfig((prev) => updateFocusRing(prev, { activeGradient: v }))
+            }
+            onInactiveGradientChange={(v) =>
+              updateConfig((prev) => updateFocusRing(prev, { inactiveGradient: v }))
+            }
+            onUrgentGradientChange={(v) =>
+              updateConfig((prev) => updateFocusRing(prev, { urgentGradient: v }))
+            }
+          />
         </>
       )}
     </SettingsGroup>

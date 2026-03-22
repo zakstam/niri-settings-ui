@@ -3,7 +3,8 @@ import { Switch } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
 import { ColorEditor } from "./color-editor";
 import { GradientEditor } from "./gradient-editor";
-import type { NiriConfig, InsertHintConfig, GradientConfig } from "@/lib/types";
+import { defaultGradient } from "@/lib/defaults";
+import type { NiriConfig, InsertHintConfig } from "@/lib/types";
 
 function updateInsertHint(
   prev: NiriConfig,
@@ -17,14 +18,6 @@ function updateInsertHint(
     },
   };
 }
-
-const defaultGradient: GradientConfig = {
-  fromColor: "#ff0000",
-  toColor: "#0000ff",
-  angle: 180,
-  relativeTo: null,
-  colorSpace: null,
-};
 
 export function InsertHintSettings() {
   const { config, updateConfig } = useConfig();

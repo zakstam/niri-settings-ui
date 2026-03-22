@@ -1,7 +1,6 @@
 import { useConfig } from "@/lib/config-context";
 import {
   Switch,
-  Slider,
   Select,
   SelectContent,
   SelectGroup,
@@ -10,6 +9,7 @@ import {
   SelectValue,
 } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { SliderInput } from "@/lib/slider-input";
 import { NumberInput } from "@/lib/number-input";
 import type { IndividualAnimation, AnimationKind, AnimationsConfig } from "@/lib/types";
 
@@ -116,63 +116,28 @@ export function AnimationCard({ name, label }: AnimationCardProps) {
           {kind.type === "spring" && (
             <>
               <SettingsRow label="Damping Ratio" description="Controls how quickly oscillations decay (0 to 2)">
-                <div className="flex items-center gap-3">
-                  <Slider
-                    value={[kind.dampingRatio]}
-                    min={0}
-                    max={2}
-                    step={0.01}
-                    onValueChange={(val) => {
-                      const v = Array.isArray(val) ? val[0] : val;
-                      updateAnimation({
-                        kind: { ...kind, dampingRatio: v },
-                      });
-                    }}
-                    className="w-32"
-                  />
-                  <NumberInput
-                    numericValue={kind.dampingRatio}
-                    min={0}
-                    max={2}
-                    step={0.01}
-                    className="w-20"
-                    onValueChange={(v) =>
-                      updateAnimation({
-                        kind: { ...kind, dampingRatio: v ?? 0 },
-                      })
-                    }
-                  />
-                </div>
+                <SliderInput
+                  value={kind.dampingRatio}
+                  min={0}
+                  max={2}
+                  step={0.01}
+                  onValueChange={(v) =>
+                    updateAnimation({ kind: { ...kind, dampingRatio: v } })
+                  }
+                />
               </SettingsRow>
 
               <SettingsRow label="Stiffness" description="Spring stiffness constant (0 to 2000)">
-                <div className="flex items-center gap-3">
-                  <Slider
-                    value={[kind.stiffness]}
-                    min={0}
-                    max={2000}
-                    step={1}
-                    onValueChange={(val) => {
-                      const v = Array.isArray(val) ? val[0] : val;
-                      updateAnimation({
-                        kind: { ...kind, stiffness: v },
-                      });
-                    }}
-                    className="w-32"
-                  />
-                  <NumberInput
-                    numericValue={kind.stiffness}
-                    min={0}
-                    max={2000}
-                    step={1}
-                    className="w-24"
-                    onValueChange={(v) =>
-                      updateAnimation({
-                        kind: { ...kind, stiffness: v ?? 0 },
-                      })
-                    }
-                  />
-                </div>
+                <SliderInput
+                  value={kind.stiffness}
+                  min={0}
+                  max={2000}
+                  step={1}
+                  inputClassName="w-24"
+                  onValueChange={(v) =>
+                    updateAnimation({ kind: { ...kind, stiffness: v } })
+                  }
+                />
               </SettingsRow>
 
               <SettingsRow label="Epsilon" description="Threshold to consider the animation complete">

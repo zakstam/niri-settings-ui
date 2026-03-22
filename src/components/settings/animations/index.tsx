@@ -1,6 +1,7 @@
 import { useConfig } from "@/lib/config-context";
-import { Switch, Slider, Input } from "spatial-grid-nav/primitives";
+import { Switch } from "spatial-grid-nav/primitives";
 import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { SliderInput } from "@/lib/slider-input";
 import { AnimationCard } from "./animation-card";
 
 export function AnimationsSection() {
@@ -34,43 +35,22 @@ export function AnimationsSection() {
               label="Slowdown"
               description="Multiply animation duration (1.0 = normal)"
             >
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={[config.animations.slowdown ?? 1.0]}
-                  min={0.1}
-                  max={10}
-                  step={0.1}
-                  onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val;
-                    updateConfig((prev) => ({
-                      ...prev,
-                      animations: {
-                        ...prev.animations,
-                        slowdown: v === 1.0 ? null : v,
-                      },
-                    }));
-                  }}
-                  className="w-40"
-                />
-                <Input
-                  type="number"
-                  value={config.animations.slowdown ?? 1.0}
-                  min={0.1}
-                  max={10}
-                  step={0.1}
-                  className="w-20"
-                  onChange={(e) =>
-                    updateConfig((prev) => ({
-                      ...prev,
-                      animations: {
-                        ...prev.animations,
-                        slowdown: e.target.value
-                          ? Number(e.target.value)
-                          : null,
-                      },
-                    }))
-                  }
-                />
-              </div>
+              <SliderInput
+                value={config.animations.slowdown ?? 1.0}
+                min={0.1}
+                max={10}
+                step={0.1}
+                sliderClassName="w-40"
+                onValueChange={(v) =>
+                  updateConfig((prev) => ({
+                    ...prev,
+                    animations: {
+                      ...prev.animations,
+                      slowdown: v === 1.0 ? null : v,
+                    },
+                  }))
+                }
+              />
             </SettingsRow>
           )}
         </SettingsGroup>

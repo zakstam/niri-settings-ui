@@ -1,6 +1,7 @@
 import { useConfig } from "@/lib/config-context";
-import { Input, Switch, Slider } from "spatial-grid-nav/primitives";
+import { Input, Switch } from "spatial-grid-nav/primitives";
 import { PageHeader, SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { SliderInput } from "@/lib/slider-input";
 import { ColorEditor } from "@/components/settings/appearance/color-editor";
 import type {
   NiriConfig,
@@ -317,36 +318,18 @@ export function EventsGesturesSection() {
           title="Overview"
         >
           <SettingsRow label="Zoom" description="Overview zoom level (0.1 to 2.0)">
-            <div className="flex items-center gap-3">
-              <Slider
-                value={[config.overview.zoom ?? 0.5]}
-                min={0.1}
-                max={2.0}
-                step={0.01}
-                onValueChange={(val) => {
-                  const v = Array.isArray(val) ? val[0] : val;
-                  updateConfig((prev) =>
-                    updateOverview(prev, { zoom: v }),
-                  );
-                }}
-                className="w-40"
-              />
-              <Input
-                type="number"
-                value={config.overview.zoom ?? 0.5}
-                min={0.1}
-                max={2.0}
-                step={0.01}
-                className="w-20"
-                onChange={(e) =>
-                  updateConfig((prev) =>
-                    updateOverview(prev, {
-                      zoom: e.target.value === "" ? null : Number(e.target.value),
-                    }),
-                  )
-                }
-              />
-            </div>
+            <SliderInput
+              value={config.overview.zoom ?? 0.5}
+              min={0.1}
+              max={2.0}
+              step={0.01}
+              sliderClassName="w-40"
+              onValueChange={(v) =>
+                updateConfig((prev) =>
+                  updateOverview(prev, { zoom: v }),
+                )
+              }
+            />
           </SettingsRow>
 
           <SettingsRow label="Backdrop Color" description="Background color behind the overview">

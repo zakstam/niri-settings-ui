@@ -1,8 +1,6 @@
 import { useConfig } from "@/lib/config-context";
 import {
-  Input,
   Switch,
-  Slider,
   Select,
   SelectContent,
   SelectGroup,
@@ -11,17 +9,9 @@ import {
   SelectValue,
 } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { SliderInput } from "@/lib/slider-input";
+import { accelProfileItems, mouseScrollMethodItems } from "@/lib/defaults";
 import type { NiriConfig, PointerConfig } from "@/lib/types";
-
-const accelProfileItems = [
-  { label: "Adaptive", value: "adaptive" },
-  { label: "Flat", value: "flat" },
-];
-
-const scrollMethodItems = [
-  { label: "No Scroll", value: "no-scroll" },
-  { label: "On Button Down", value: "on-button-down" },
-];
 
 function updateMouse(
   prev: NiriConfig,
@@ -77,31 +67,16 @@ export function MouseSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-3">
-            <Slider
-              value={[mouse.accelSpeed ?? 0]}
-              min={-1}
-              max={1}
-              step={0.1}
-              onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateMouse(prev, { accelSpeed: v })); }}
-              className="w-48"
-            />
-            <Input
-              type="number"
-              value={mouse.accelSpeed ?? 0}
-              min={-1}
-              max={1}
-              step={0.1}
-              className="w-24"
-              onChange={(e) =>
-                updateConfig((prev) =>
-                  updateMouse(prev, {
-                    accelSpeed: e.target.value === "" ? null : Number(e.target.value),
-                  }),
-                )
-              }
-            />
-          </div>
+          <SliderInput
+            value={mouse.accelSpeed ?? 0}
+            min={-1}
+            max={1}
+            step={0.1}
+            fallback={0}
+            sliderClassName="w-48"
+            inputClassName="w-24"
+            onValueChange={(v) => updateConfig((prev) => updateMouse(prev, { accelSpeed: v }))}
+          />
         </SettingsRow>
 
         <SettingsRow label="Acceleration Profile" description="Method used for pointer acceleration">
@@ -136,7 +111,7 @@ export function MouseSettings() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {scrollMethodItems.map((item) => (
+                {mouseScrollMethodItems.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.label}
                   </SelectItem>
@@ -147,31 +122,15 @@ export function MouseSettings() {
         </SettingsRow>
 
         <SettingsRow label="Scroll Factor" description="Multiplier for scroll speed (default 1.0)">
-          <div className="flex items-center gap-3">
-            <Slider
-              value={[mouse.scrollFactor ?? 1.0]}
-              min={0.1}
-              max={5}
-              step={0.1}
-              onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateConfig((prev) => updateMouse(prev, { scrollFactor: v })); }}
-              className="w-48"
-            />
-            <Input
-              type="number"
-              value={mouse.scrollFactor ?? 1.0}
-              min={0.1}
-              max={5}
-              step={0.1}
-              className="w-24"
-              onChange={(e) =>
-                updateConfig((prev) =>
-                  updateMouse(prev, {
-                    scrollFactor: e.target.value === "" ? null : Number(e.target.value),
-                  }),
-                )
-              }
-            />
-          </div>
+          <SliderInput
+            value={mouse.scrollFactor ?? 1.0}
+            min={0.1}
+            max={5}
+            step={0.1}
+            sliderClassName="w-48"
+            inputClassName="w-24"
+            onValueChange={(v) => updateConfig((prev) => updateMouse(prev, { scrollFactor: v }))}
+          />
         </SettingsRow>
       </SettingsGroup>
     </div>

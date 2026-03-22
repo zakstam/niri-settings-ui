@@ -1,6 +1,7 @@
 import { useConfig } from "@/lib/config-context";
-import { Switch, Slider } from "spatial-grid-nav/primitives";
+import { Switch } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { SliderInput } from "@/lib/slider-input";
 import { NumberInput } from "@/lib/number-input";
 import { ColorEditor } from "./color-editor";
 import type { NiriConfig, ShadowConfig } from "@/lib/types";
@@ -48,55 +49,27 @@ export function ShadowSettings() {
           </SettingsRow>
 
           <SettingsRow label="Softness" description="Blur radius of the shadow (0-100)">
-            <div className="flex items-center gap-3">
-              <Slider
-                value={[shadow.softness ?? 0]}
-                min={0}
-                max={100}
-                step={1}
-                onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val;
-                  updateConfig((prev) => updateShadow(prev, { softness: v }));
-                }}
-                className="w-32"
-              />
-              <NumberInput
-                numericValue={shadow.softness ?? null}
-                min={0}
-                max={100}
-                className="w-20"
-                onValueChange={(v) =>
-                  updateConfig((prev) =>
-                    updateShadow(prev, { softness: v ?? 0 }),
-                  )
-                }
-              />
-            </div>
+            <SliderInput
+              value={shadow.softness ?? 0}
+              min={0}
+              max={100}
+              step={1}
+              onValueChange={(v) =>
+                updateConfig((prev) => updateShadow(prev, { softness: v }))
+              }
+            />
           </SettingsRow>
 
           <SettingsRow label="Spread" description="How far the shadow extends beyond the window (-20 to 40)">
-            <div className="flex items-center gap-3">
-              <Slider
-                value={[shadow.spread ?? 0]}
-                min={-20}
-                max={40}
-                step={1}
-                onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val;
-                  updateConfig((prev) => updateShadow(prev, { spread: v }));
-                }}
-                className="w-32"
-              />
-              <NumberInput
-                numericValue={shadow.spread ?? null}
-                min={-20}
-                max={40}
-                className="w-20"
-                onValueChange={(v) =>
-                  updateConfig((prev) =>
-                    updateShadow(prev, { spread: v ?? 0 }),
-                  )
-                }
-              />
-            </div>
+            <SliderInput
+              value={shadow.spread ?? 0}
+              min={-20}
+              max={40}
+              step={1}
+              onValueChange={(v) =>
+                updateConfig((prev) => updateShadow(prev, { spread: v }))
+              }
+            />
           </SettingsRow>
 
           <SettingsRow label="Offset" description="Horizontal and vertical offset of the shadow in pixels">

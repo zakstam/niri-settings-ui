@@ -2,22 +2,17 @@ import { useConfig } from "@/lib/config-context";
 import {
   Input,
   Switch,
-  Button,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
 } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
-import { IconChevronDown } from "@tabler/icons-react";
 import { ColorEditor } from "./color-editor";
-import { GradientEditor } from "./gradient-editor";
-import type { NiriConfig, TabIndicatorConfig, GradientConfig } from "@/lib/types";
+import { GradientOptionsSection } from "./gradient-options-section";
+import type { NiriConfig, TabIndicatorConfig } from "@/lib/types";
 
 function updateTabIndicator(
   prev: NiriConfig,
@@ -31,14 +26,6 @@ function updateTabIndicator(
     },
   };
 }
-
-const defaultGradient: GradientConfig = {
-  fromColor: "#ff0000",
-  toColor: "#0000ff",
-  angle: 180,
-  relativeTo: null,
-  colorSpace: null,
-};
 
 export function TabIndicatorSettings() {
   const { config, updateConfig } = useConfig();
@@ -210,101 +197,21 @@ export function TabIndicatorSettings() {
             />
           </SettingsRow>
 
-          <Collapsible>
-            <CollapsibleTrigger
-              render={<Button variant="ghost" size="sm" className="w-full justify-between" />}
-            >
-              Gradient Options
-              <IconChevronDown size={16} />
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="pt-1">
-                <SettingsRow
-                  label="Active Gradient"
-                  description="Gradient overlay on the active tab indicator"
-                >
-                  <Switch
-                    checked={indicator.activeGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateTabIndicator(prev, {
-                          activeGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {indicator.activeGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={indicator.activeGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, { activeGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-
-                <SettingsRow
-                  label="Inactive Gradient"
-                  description="Gradient overlay on inactive tab indicators"
-                >
-                  <Switch
-                    checked={indicator.inactiveGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateTabIndicator(prev, {
-                          inactiveGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {indicator.inactiveGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={indicator.inactiveGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, { inactiveGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-
-                <SettingsRow
-                  label="Urgent Gradient"
-                  description="Gradient overlay on urgent tab indicators"
-                >
-                  <Switch
-                    checked={indicator.urgentGradient !== null}
-                    onCheckedChange={(v) =>
-                      updateConfig((prev) =>
-                        updateTabIndicator(prev, {
-                          urgentGradient: v ? { ...defaultGradient } : null,
-                        }),
-                      )
-                    }
-                  />
-                </SettingsRow>
-                {indicator.urgentGradient && (
-                  <div className="px-4 pb-3">
-                    <GradientEditor
-                      value={indicator.urgentGradient}
-                      onChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, { urgentGradient: v }),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+          <GradientOptionsSection
+            subject="tab indicator"
+            activeGradient={indicator.activeGradient}
+            inactiveGradient={indicator.inactiveGradient}
+            urgentGradient={indicator.urgentGradient}
+            onActiveGradientChange={(v) =>
+              updateConfig((prev) => updateTabIndicator(prev, { activeGradient: v }))
+            }
+            onInactiveGradientChange={(v) =>
+              updateConfig((prev) => updateTabIndicator(prev, { inactiveGradient: v }))
+            }
+            onUrgentGradientChange={(v) =>
+              updateConfig((prev) => updateTabIndicator(prev, { urgentGradient: v }))
+            }
+          />
         </>
       )}
     </SettingsGroup>

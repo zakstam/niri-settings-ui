@@ -8,7 +8,6 @@ import {
   Button,
   Input,
   Switch,
-  Slider,
   Label,
   Separator,
   ScrollArea,
@@ -20,6 +19,7 @@ import {
   SelectValue,
 } from "spatial-grid-nav/primitives";
 import { IconPlus } from "@tabler/icons-react";
+import { SliderInput } from "@/lib/slider-input";
 import { MatchEditor } from "./match-editor";
 import type { WindowRule, MatchRule, ColumnWidth } from "@/lib/types";
 
@@ -246,30 +246,13 @@ export function RuleEditor({ open, onOpenChange, rule, onSave }: RuleEditorProps
 
               <div className="space-y-1.5">
                 <Label className="text-sm">Opacity</Label>
-                <div className="flex items-center gap-3">
-                  <Slider
-                    value={[draft.opacity ?? 1]}
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    onValueChange={(val) => { const v = Array.isArray(val) ? val[0] : val; updateDraft({ opacity: v }); }}
-                    className="w-32"
-                  />
-                  <Input
-                    type="number"
-                    value={draft.opacity ?? ""}
-                    placeholder="1.0"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    className="w-20"
-                    onChange={(e) =>
-                      updateDraft({
-                        opacity: e.target.value === "" ? null : Number(e.target.value),
-                      })
-                    }
-                  />
-                </div>
+                <SliderInput
+                  value={draft.opacity ?? 1}
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  onValueChange={(v) => updateDraft({ opacity: v })}
+                />
               </div>
 
               <div className="space-y-1.5">
