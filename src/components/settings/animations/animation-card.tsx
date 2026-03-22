@@ -2,7 +2,6 @@ import { useConfig } from "@/lib/config-context";
 import {
   Switch,
   Slider,
-  Input,
   Select,
   SelectContent,
   SelectGroup,
@@ -11,6 +10,7 @@ import {
   SelectValue,
 } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { NumberInput } from "@/lib/number-input";
 import type { IndividualAnimation, AnimationKind, AnimationsConfig } from "@/lib/types";
 
 const easingCurves = [
@@ -130,16 +130,15 @@ export function AnimationCard({ name, label }: AnimationCardProps) {
                     }}
                     className="w-32"
                   />
-                  <Input
-                    type="number"
-                    value={kind.dampingRatio}
+                  <NumberInput
+                    numericValue={kind.dampingRatio}
                     min={0}
                     max={2}
                     step={0.01}
                     className="w-20"
-                    onChange={(e) =>
+                    onValueChange={(v) =>
                       updateAnimation({
-                        kind: { ...kind, dampingRatio: Number(e.target.value) || 0 },
+                        kind: { ...kind, dampingRatio: v ?? 0 },
                       })
                     }
                   />
@@ -161,16 +160,15 @@ export function AnimationCard({ name, label }: AnimationCardProps) {
                     }}
                     className="w-32"
                   />
-                  <Input
-                    type="number"
-                    value={kind.stiffness}
+                  <NumberInput
+                    numericValue={kind.stiffness}
                     min={0}
                     max={2000}
                     step={1}
                     className="w-24"
-                    onChange={(e) =>
+                    onValueChange={(v) =>
                       updateAnimation({
-                        kind: { ...kind, stiffness: Number(e.target.value) || 0 },
+                        kind: { ...kind, stiffness: v ?? 0 },
                       })
                     }
                   />
@@ -178,15 +176,14 @@ export function AnimationCard({ name, label }: AnimationCardProps) {
               </SettingsRow>
 
               <SettingsRow label="Epsilon" description="Threshold to consider the animation complete">
-                <Input
-                  type="number"
-                  value={kind.epsilon}
+                <NumberInput
+                  numericValue={kind.epsilon}
                   step={0.0001}
                   min={0}
                   className="w-28"
-                  onChange={(e) =>
+                  onValueChange={(v) =>
                     updateAnimation({
-                      kind: { ...kind, epsilon: Number(e.target.value) || 0.0001 },
+                      kind: { ...kind, epsilon: v ?? 0.0001 },
                     })
                   }
                 />
@@ -197,15 +194,14 @@ export function AnimationCard({ name, label }: AnimationCardProps) {
           {kind.type === "easing" && (
             <>
               <SettingsRow label="Duration (ms)" description="Animation duration in milliseconds">
-                <Input
-                  type="number"
-                  value={kind.durationMs}
+                <NumberInput
+                  numericValue={kind.durationMs}
                   min={0}
                   step={10}
                   className="w-24"
-                  onChange={(e) =>
+                  onValueChange={(v) =>
                     updateAnimation({
-                      kind: { ...kind, durationMs: Number(e.target.value) || 0 },
+                      kind: { ...kind, durationMs: v ?? 0 },
                     })
                   }
                 />

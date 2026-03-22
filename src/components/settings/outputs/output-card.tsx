@@ -16,6 +16,7 @@ import {
   Button,
 } from "spatial-grid-nav/primitives";
 import { SettingsRow } from "spatial-grid-nav/layouts";
+import { NumberInput } from "@/lib/number-input";
 import type { NiriConfig, OutputConfig } from "@/lib/types";
 import { IconTrash } from "@tabler/icons-react";
 
@@ -59,8 +60,8 @@ export function OutputCard({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            {output.name}
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="truncate">{output.name}</span>
             {output.off && (
               <Badge variant="secondary">Disabled</Badge>
             )}
@@ -102,19 +103,16 @@ export function OutputCard({
         </SettingsRow>
 
         <SettingsRow label="Scale" description="Output scale factor (e.g. 1, 1.5, 2)">
-          <Input
-            type="number"
-            value={output.scale ?? ""}
+          <NumberInput
+            numericValue={output.scale}
             placeholder="1"
             min={0.25}
             max={8}
             step={0.25}
             className="w-24"
-            onChange={(e) =>
+            onValueChange={(v) =>
               updateConfig((prev) =>
-                updateOutput(prev, index, {
-                  scale: e.target.value === "" ? null : Number(e.target.value),
-                }),
+                updateOutput(prev, index, { scale: v }),
               )
             }
           />
@@ -151,33 +149,29 @@ export function OutputCard({
             : "X and Y position of this output in the layout"}
         >
           <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              value={isPrimary ? 0 : output.positionX ?? ""}
+            <NumberInput
+              numericValue={isPrimary ? 0 : output.positionX}
               placeholder="X"
               className="w-20"
-              readOnly={isPrimary}
               disabled={isPrimary}
-              onChange={(e) =>
+              onValueChange={(v) =>
                 updateConfig((prev) =>
                   updateOutput(prev, index, {
-                    positionX: isPrimary ? 0 : (e.target.value === "" ? null : Number(e.target.value)),
+                    positionX: isPrimary ? 0 : v,
                   }),
                 )
               }
             />
             <span className="text-xs text-muted-foreground">x</span>
-            <Input
-              type="number"
-              value={isPrimary ? 0 : output.positionY ?? ""}
+            <NumberInput
+              numericValue={isPrimary ? 0 : output.positionY}
               placeholder="Y"
               className="w-20"
-              readOnly={isPrimary}
               disabled={isPrimary}
-              onChange={(e) =>
+              onValueChange={(v) =>
                 updateConfig((prev) =>
                   updateOutput(prev, index, {
-                    positionY: isPrimary ? 0 : (e.target.value === "" ? null : Number(e.target.value)),
+                    positionY: isPrimary ? 0 : v,
                   }),
                 )
               }

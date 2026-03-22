@@ -122,8 +122,15 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       await writeConfig(config);
-      await reloadNiri();
+      // Config file was written successfully — mark as clean
       setOriginalConfig(deepClone(config));
+      try {
+        await reloadNiri();
+      } catch (reloadErr) {
+        const message =
+          reloadErr instanceof Error ? reloadErr.message : String(reloadErr);
+        setError(`Config saved, but niri reload failed: ${message}`);
+      }
     } catch (err) {
       const message =
         err instanceof Error ? err.message : String(err);

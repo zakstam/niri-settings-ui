@@ -1,6 +1,7 @@
 import { useConfig } from "@/lib/config-context";
-import { Input, Switch, Slider } from "spatial-grid-nav/primitives";
+import { Switch, Slider } from "spatial-grid-nav/primitives";
 import { SettingsGroup, SettingsRow } from "spatial-grid-nav/layouts";
+import { NumberInput } from "@/lib/number-input";
 import { ColorEditor } from "./color-editor";
 import type { NiriConfig, ShadowConfig } from "@/lib/types";
 
@@ -58,15 +59,14 @@ export function ShadowSettings() {
                 }}
                 className="w-32"
               />
-              <Input
-                type="number"
-                value={shadow.softness ?? ""}
+              <NumberInput
+                numericValue={shadow.softness ?? null}
                 min={0}
                 max={100}
                 className="w-20"
-                onChange={(e) =>
+                onValueChange={(v) =>
                   updateConfig((prev) =>
-                    updateShadow(prev, { softness: Number(e.target.value) || 0 }),
+                    updateShadow(prev, { softness: v ?? 0 }),
                   )
                 }
               />
@@ -85,15 +85,14 @@ export function ShadowSettings() {
                 }}
                 className="w-32"
               />
-              <Input
-                type="number"
-                value={shadow.spread ?? ""}
+              <NumberInput
+                numericValue={shadow.spread ?? null}
                 min={-20}
                 max={40}
                 className="w-20"
-                onChange={(e) =>
+                onValueChange={(v) =>
                   updateConfig((prev) =>
-                    updateShadow(prev, { spread: Number(e.target.value) || 0 }),
+                    updateShadow(prev, { spread: v ?? 0 }),
                   )
                 }
               />
@@ -104,26 +103,24 @@ export function ShadowSettings() {
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-center gap-1">
                 <span className="text-xs text-muted-foreground">X</span>
-                <Input
-                  type="number"
-                  value={shadow.offsetX ?? ""}
+                <NumberInput
+                  numericValue={shadow.offsetX ?? null}
                   className="w-20"
-                  onChange={(e) =>
+                  onValueChange={(v) =>
                     updateConfig((prev) =>
-                      updateShadow(prev, { offsetX: Number(e.target.value) || 0 }),
+                      updateShadow(prev, { offsetX: v ?? 0 }),
                     )
                   }
                 />
               </div>
               <div className="flex flex-col items-center gap-1">
                 <span className="text-xs text-muted-foreground">Y</span>
-                <Input
-                  type="number"
-                  value={shadow.offsetY ?? ""}
+                <NumberInput
+                  numericValue={shadow.offsetY ?? null}
                   className="w-20"
-                  onChange={(e) =>
+                  onValueChange={(v) =>
                     updateConfig((prev) =>
-                      updateShadow(prev, { offsetY: Number(e.target.value) || 0 }),
+                      updateShadow(prev, { offsetY: v ?? 0 }),
                     )
                   }
                 />
