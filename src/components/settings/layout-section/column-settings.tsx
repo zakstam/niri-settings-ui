@@ -107,6 +107,7 @@ function ColumnWidthEditor({ widths, onChange, label }: ColumnWidthEditorProps) 
               <Button
                 variant="ghost"
                 size="icon-xs"
+                aria-label="Remove"
                 onClick={() => removeWidth(index)}
               >
                 <IconTrash size={14} />

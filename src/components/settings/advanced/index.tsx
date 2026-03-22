@@ -74,6 +74,7 @@ export function AdvancedSection() {
                     <Button
                       variant="ghost"
                       size="icon-xs"
+                      aria-label="Delete"
                       onClick={() => deleteLayerRule(rule.id)}
                     >
                       <IconTrash size={14} />
@@ -171,7 +172,7 @@ export function AdvancedSection() {
         </SettingsGroup>
 
         <SettingsGroup title="Clipboard" description="Clipboard behavior settings">
-          <SettingsRow label="Disable Primary Selection" description="Disable the primary (middle-click) clipboard">
+          <SettingsRow label="Disable Primary Selection" description="Prevent middle-click paste from the selection clipboard">
             <Switch
               checked={config.clipboard.disablePrimary}
               onCheckedChange={(v) =>

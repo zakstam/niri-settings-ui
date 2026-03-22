@@ -285,7 +285,7 @@ export function EventsGesturesSection() {
           title="Hot Corners"
           description="Enable overview activation from screen corners"
         >
-          <SettingsRow label="Enable Hot Corners" description="Turn on hot corner activation">
+          <SettingsRow label="Enable Hot Corners" description="Activate overview from screen corners">
             <Switch
               checked={!hotCorners.off}
               onCheckedChange={(v) => updateHotCorners({ off: !v })}

@@ -61,7 +61,7 @@ export function ApplyBar() {
         <div className="flex items-center justify-end gap-3">
           <div className="mr-auto flex items-center gap-2">
             <div className="size-1.5 rounded-full bg-accent-color" />
-            <span className="text-[12px] font-medium text-muted-foreground">
+            <span className="text-[11px] font-medium text-muted-foreground">
               Unsaved changes
             </span>
           </div>

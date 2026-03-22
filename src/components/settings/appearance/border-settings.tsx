@@ -44,7 +44,7 @@ export function BorderSettings() {
 
   return (
     <SettingsGroup title="Window Border" description="Border drawn around windows">
-      <SettingsRow label="Disable Border" description="Turn off window borders entirely">
+      <SettingsRow label="Disable Border" description="Hide window borders entirely">
         <Switch
           checked={border.off}
           onCheckedChange={(v) =>

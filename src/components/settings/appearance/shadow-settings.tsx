@@ -26,7 +26,7 @@ export function ShadowSettings() {
 
   return (
     <SettingsGroup title="Window Shadow" description="Drop shadow behind windows">
-      <SettingsRow label="Enable Shadow" description="Show a drop shadow behind windows">
+      <SettingsRow label="Enable Shadow" description="Draw a drop shadow behind windows">
         <Switch
           checked={shadow.on}
           onCheckedChange={(v) =>

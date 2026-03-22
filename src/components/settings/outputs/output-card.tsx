@@ -79,7 +79,7 @@ export function OutputCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SettingsRow label="Disable Output" description="Turn off this output">
+        <SettingsRow label="Disable Output" description="Power off this display">
           <Switch
             checked={output.off}
             onCheckedChange={(v) =>

@@ -44,7 +44,7 @@ export function RingSettings() {
 
   return (
     <SettingsGroup title="Focus Ring" description="Visual indicator around the focused window">
-      <SettingsRow label="Disable Focus Ring" description="Turn off the focus ring entirely">
+      <SettingsRow label="Disable Focus Ring" description="Hide the focus ring entirely">
         <Switch
           checked={ring.off}
           onCheckedChange={(v) =>

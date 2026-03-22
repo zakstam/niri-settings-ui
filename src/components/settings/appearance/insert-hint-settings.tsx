@@ -38,7 +38,7 @@ export function InsertHintSettings() {
       title="Insert Hint"
       description="Visual hint showing where a new window will be inserted"
     >
-      <SettingsRow label="Disable Insert Hint" description="Turn off the insert hint">
+      <SettingsRow label="Disable Insert Hint" description="Hide the insert window hint">
         <Switch
           checked={hint.off}
           onCheckedChange={(v) =>

@@ -210,6 +210,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Save"
                           onClick={saveEdit}
                         >
                           <IconCheck size={14} />
@@ -217,6 +218,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Cancel"
                           onClick={cancelEdit}
                         >
                           <IconX size={14} />
@@ -230,6 +232,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Edit"
                           onClick={() => startEdit(index)}
                         >
                           <IconEdit size={14} />
@@ -237,6 +240,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Delete"
                           onClick={() => deleteSpawn(index)}
                         >
                           <IconTrash size={14} />
@@ -334,6 +338,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Save"
                           onClick={saveShEdit}
                         >
                           <IconCheck size={14} />
@@ -341,6 +346,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Cancel"
                           onClick={cancelShEdit}
                         >
                           <IconX size={14} />
@@ -354,6 +360,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Edit"
                           onClick={() => startShEdit(index)}
                         >
                           <IconEdit size={14} />
@@ -361,6 +368,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Delete"
                           onClick={() => deleteShSpawn(index)}
                         >
                           <IconTrash size={14} />
@@ -424,6 +432,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Save"
                           onClick={saveEnvEdit}
                         >
                           <IconCheck size={14} />
@@ -431,6 +440,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Cancel"
                           onClick={cancelEnvEdit}
                         >
                           <IconX size={14} />
@@ -444,6 +454,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Edit"
                           onClick={() => startEnvEdit(index)}
                         >
                           <IconEdit size={14} />
@@ -451,6 +462,7 @@ export function StartupSection() {
                         <Button
                           variant="ghost"
                           size="icon-xs"
+                          aria-label="Delete"
                           onClick={() => deleteEnvVar(index)}
                         >
                           <IconTrash size={14} />

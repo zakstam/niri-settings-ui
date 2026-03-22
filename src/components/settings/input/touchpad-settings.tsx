@@ -48,7 +48,7 @@ export function TouchpadSettings() {
   return (
     <div className="space-y-6">
       <SettingsGroup title="General">
-        <SettingsRow label="Disable Touchpad" description="Turn off the touchpad entirely">
+        <SettingsRow label="Disable Touchpad" description="Ignore all touchpad input">
           <Switch
             checked={tp.off}
             onCheckedChange={(v) => updateConfig((prev) => updateTouchpad(prev, { off: v }))}
@@ -69,21 +69,21 @@ export function TouchpadSettings() {
           />
         </SettingsRow>
 
-        <SettingsRow label="Disable While Typing" description="Deactivate the touchpad when typing on the keyboard">
+        <SettingsRow label="Disable While Typing" description="Suppress touchpad input while typing on the keyboard">
           <Switch
             checked={tp.dwt}
             onCheckedChange={(v) => updateConfig((prev) => updateTouchpad(prev, { dwt: v }))}
           />
         </SettingsRow>
 
-        <SettingsRow label="Disable While Trackpointing" description="Deactivate the touchpad when using a trackpoint">
+        <SettingsRow label="Disable While Trackpointing" description="Suppress touchpad input while using a trackpoint">
           <Switch
             checked={tp.dwtp}
             onCheckedChange={(v) => updateConfig((prev) => updateTouchpad(prev, { dwtp: v }))}
           />
         </SettingsRow>
 
-        <SettingsRow label="Disabled on External Mouse" description="Disable when an external mouse is connected">
+        <SettingsRow label="Disabled on External Mouse" description="Suppress touchpad when an external mouse is connected">
           <Switch
             checked={tp.disabledOnExternalMouse}
             onCheckedChange={(v) => updateConfig((prev) => updateTouchpad(prev, { disabledOnExternalMouse: v }))}

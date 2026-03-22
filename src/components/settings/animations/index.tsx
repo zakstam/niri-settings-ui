@@ -19,7 +19,7 @@ export function AnimationsSection() {
         <SettingsGroup title="Animation Settings">
           <SettingsRow
             label="Disable Animations"
-            description="Turn off all animations"
+            description="Disable all animations globally"
           >
             <Switch
               checked={config.animations.off}

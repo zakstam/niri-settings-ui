@@ -46,7 +46,7 @@ export function MouseSettings() {
   return (
     <div className="space-y-6">
       <SettingsGroup title="General">
-        <SettingsRow label="Disable Mouse" description="Turn off mouse input entirely">
+        <SettingsRow label="Disable Mouse" description="Ignore all mouse input">
           <Switch
             checked={mouse.off}
             onCheckedChange={(v) => updateConfig((prev) => updateMouse(prev, { off: v }))}

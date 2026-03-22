@@ -49,7 +49,7 @@ export function TabIndicatorSettings() {
 
   return (
     <SettingsGroup title="Tab Indicator" description="Visual indicator for tabbed column display">
-      <SettingsRow label="Disable Tab Indicator" description="Turn off the tab indicator">
+      <SettingsRow label="Disable Tab Indicator" description="Hide the tab indicator">
         <Switch
           checked={indicator.off}
           onCheckedChange={(v) =>
@@ -218,22 +218,24 @@ export function TabIndicatorSettings() {
               <IconChevronDown size={16} />
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <div className="space-y-4 pt-3">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Active Gradient</span>
-                    <Switch
-                      checked={indicator.activeGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, {
-                            activeGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
-                  </div>
-                  {indicator.activeGradient && (
+              <div className="pt-1">
+                <SettingsRow
+                  label="Active Gradient"
+                  description="Gradient overlay on the active tab indicator"
+                >
+                  <Switch
+                    checked={indicator.activeGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateTabIndicator(prev, {
+                          activeGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {indicator.activeGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={indicator.activeGradient}
                       onChange={(v) =>
@@ -242,24 +244,26 @@ export function TabIndicatorSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Inactive Gradient</span>
-                    <Switch
-                      checked={indicator.inactiveGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, {
-                            inactiveGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {indicator.inactiveGradient && (
+                )}
+
+                <SettingsRow
+                  label="Inactive Gradient"
+                  description="Gradient overlay on inactive tab indicators"
+                >
+                  <Switch
+                    checked={indicator.inactiveGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateTabIndicator(prev, {
+                          inactiveGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {indicator.inactiveGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={indicator.inactiveGradient}
                       onChange={(v) =>
@@ -268,24 +272,26 @@ export function TabIndicatorSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Urgent Gradient</span>
-                    <Switch
-                      checked={indicator.urgentGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateTabIndicator(prev, {
-                            urgentGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {indicator.urgentGradient && (
+                )}
+
+                <SettingsRow
+                  label="Urgent Gradient"
+                  description="Gradient overlay on urgent tab indicators"
+                >
+                  <Switch
+                    checked={indicator.urgentGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateTabIndicator(prev, {
+                          urgentGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {indicator.urgentGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={indicator.urgentGradient}
                       onChange={(v) =>
@@ -294,8 +300,8 @@ export function TabIndicatorSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </CollapsibleContent>
           </Collapsible>

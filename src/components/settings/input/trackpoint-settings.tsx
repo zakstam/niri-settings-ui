@@ -46,7 +46,7 @@ export function TrackpointSettings() {
   return (
     <div className="space-y-6">
       <SettingsGroup title="General">
-        <SettingsRow label="Disable Trackpoint" description="Turn off trackpoint input entirely">
+        <SettingsRow label="Disable Trackpoint" description="Ignore all trackpoint input">
           <Switch
             checked={tp.off}
             onCheckedChange={(v) => updateConfig((prev) => updateTrackpoint(prev, { off: v }))}

@@ -126,6 +126,7 @@ export function WorkspacesSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Save"
                         onClick={saveEdit}
                       >
                         <IconCheck size={14} />
@@ -133,6 +134,7 @@ export function WorkspacesSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Cancel"
                         onClick={cancelEdit}
                       >
                         <IconX size={14} />
@@ -153,6 +155,7 @@ export function WorkspacesSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Edit"
                         onClick={() => startEdit(ws)}
                       >
                         <IconEdit size={14} />
@@ -160,6 +163,7 @@ export function WorkspacesSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Delete"
                         onClick={() => deleteWorkspace(ws.id)}
                       >
                         <IconTrash size={14} />

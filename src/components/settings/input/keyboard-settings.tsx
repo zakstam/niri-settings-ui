@@ -138,7 +138,7 @@ export function KeyboardSettings() {
       </SettingsGroup>
 
       <SettingsGroup title="Numlock">
-        <SettingsRow label="Enable Numlock" description="Turn on Num Lock at startup">
+        <SettingsRow label="Enable Numlock" description="Activate Num Lock at startup">
           <Switch
             checked={config.input.keyboard.numlock}
             onCheckedChange={(v) =>

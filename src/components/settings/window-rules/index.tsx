@@ -150,6 +150,7 @@ export function WindowRulesSection() {
                     <Button
                       variant="ghost"
                       size="icon-xs"
+                      aria-label="Edit"
                       onClick={() => editRule(rule)}
                     >
                       <IconEdit size={14} />
@@ -157,6 +158,7 @@ export function WindowRulesSection() {
                     <Button
                       variant="ghost"
                       size="icon-xs"
+                      aria-label="Delete"
                       onClick={() => deleteRule(rule.id)}
                     >
                       <IconTrash size={14} />

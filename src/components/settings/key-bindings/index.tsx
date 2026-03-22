@@ -149,6 +149,7 @@ export function KeyBindingsSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Edit"
                         onClick={() => editBinding(binding)}
                       >
                         <IconEdit size={14} />
@@ -156,6 +157,7 @@ export function KeyBindingsSection() {
                       <Button
                         variant="ghost"
                         size="icon-xs"
+                        aria-label="Delete"
                         onClick={() => deleteBinding(binding.id)}
                       >
                         <IconTrash size={14} />

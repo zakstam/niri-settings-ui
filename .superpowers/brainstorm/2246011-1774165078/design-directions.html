@@ -1,0 +1,223 @@
+<h2>Design Direction</h2>
+<p class="subtitle">Which personality should the settings UI have?</p>
+
+<div class="cards">
+  <!-- Option A: Utilitarian -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden;">
+      <div style="
+        background: #1a1a1a;
+        color: #d4d4d4;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 12px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      ">
+        <!-- Header -->
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
+          border-bottom: 1px solid #2a2a2a;
+          background: #1a1a1a;
+        ">
+          <div style="width: 18px; height: 18px; background: #333; border-radius: 4px;"></div>
+          <span style="font-size: 11px; font-weight: 600; color: #888; letter-spacing: 0.5px;">NIRI SETTINGS</span>
+          <div style="display: flex; gap: 2px; margin-left: 12px;">
+            <span style="padding: 4px 10px; font-size: 11px; color: #e0e0e0; background: #2a2a2a; border-radius: 4px;">Input</span>
+            <span style="padding: 4px 10px; font-size: 11px; color: #666;">Outputs</span>
+            <span style="padding: 4px 10px; font-size: 11px; color: #666;">Layout</span>
+            <span style="padding: 4px 10px; font-size: 11px; color: #666;">Appearance</span>
+            <span style="padding: 4px 10px; font-size: 11px; color: #666;">Bindings</span>
+          </div>
+        </div>
+        <!-- Content -->
+        <div style="padding: 20px 24px; flex: 1;">
+          <div style="font-size: 16px; font-weight: 600; color: #e0e0e0; margin-bottom: 4px;">Input</div>
+          <div style="font-size: 11px; color: #666; margin-bottom: 20px;">Keyboard, touchpad, mouse, and focus behavior</div>
+
+          <!-- Sub-tabs -->
+          <div style="display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid #2a2a2a;">
+            <span style="padding: 6px 12px; font-size: 11px; color: #e0e0e0; border-bottom: 2px solid #888;">Keyboard</span>
+            <span style="padding: 6px 12px; font-size: 11px; color: #555;">Touchpad</span>
+            <span style="padding: 6px 12px; font-size: 11px; color: #555;">Mouse</span>
+            <span style="padding: 6px 12px; font-size: 11px; color: #555;">Focus</span>
+          </div>
+
+          <!-- Section title -->
+          <div style="font-size: 10px; font-weight: 600; color: #555; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 12px;">XKB Configuration</div>
+
+          <!-- Row 1 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222;">
+            <div>
+              <div style="font-size: 12px; color: #d4d4d4;">Layout</div>
+              <div style="font-size: 10px; color: #555; margin-top: 2px;">XKB keyboard layout (e.g. us, de, fr)</div>
+            </div>
+            <div style="background: #222; border: 1px solid #333; border-radius: 4px; padding: 4px 8px; font-size: 11px; color: #aaa; min-width: 80px; text-align: center;">us</div>
+          </div>
+
+          <!-- Row 2 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222;">
+            <div>
+              <div style="font-size: 12px; color: #d4d4d4;">Repeat Delay</div>
+              <div style="font-size: 10px; color: #555; margin-top: 2px;">Milliseconds before key repeat starts</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 80px; height: 4px; background: #333; border-radius: 2px; position: relative;">
+                <div style="width: 50%; height: 100%; background: #888; border-radius: 2px;"></div>
+              </div>
+              <div style="background: #222; border: 1px solid #333; border-radius: 4px; padding: 4px 8px; font-size: 11px; color: #aaa; width: 50px; text-align: center;">600</div>
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222;">
+            <div>
+              <div style="font-size: 12px; color: #d4d4d4;">Repeat Rate</div>
+              <div style="font-size: 10px; color: #555; margin-top: 2px;">Characters per second during key repeat</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 80px; height: 4px; background: #333; border-radius: 2px; position: relative;">
+                <div style="width: 65%; height: 100%; background: #888; border-radius: 2px;"></div>
+              </div>
+              <div style="background: #222; border: 1px solid #333; border-radius: 4px; padding: 4px 8px; font-size: 11px; color: #aaa; width: 50px; text-align: center;">25</div>
+            </div>
+          </div>
+
+          <!-- Row 4 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+            <div>
+              <div style="font-size: 12px; color: #d4d4d4;">Numlock on Startup</div>
+              <div style="font-size: 10px; color: #555; margin-top: 2px;">Enable numlock when niri starts</div>
+            </div>
+            <div style="width: 32px; height: 18px; background: #333; border-radius: 9px; position: relative;">
+              <div style="width: 14px; height: 14px; background: #666; border-radius: 50%; position: absolute; top: 2px; left: 2px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Utilitarian / Technical</h3>
+      <p>No decoration. Flat dividers instead of cards. Tight spacing. Proportional sans-serif font. Solid backgrounds — no glass, grain, or glows. The tool disappears, the settings stay.</p>
+      <p style="margin-top: 8px; font-size: 12px; opacity: 0.6;">Think: GNOME Settings + well-designed terminal app</p>
+    </div>
+  </div>
+
+  <!-- Option B: Clean & Refined -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden;">
+      <div style="
+        background: #161618;
+        color: #e0e0e0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 12px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      ">
+        <!-- Header -->
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+          background: rgba(255,255,255,0.02);
+        ">
+          <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #2a2a2e, #3a3a3e); border-radius: 5px;"></div>
+          <span style="font-size: 12px; font-weight: 600; color: #ccc;">Niri Settings</span>
+          <div style="display: flex; gap: 4px; margin-left: 12px;">
+            <span style="padding: 5px 12px; font-size: 11px; color: #e0e0e0; background: rgba(255,255,255,0.08); border-radius: 6px; font-weight: 500;">Input</span>
+            <span style="padding: 5px 12px; font-size: 11px; color: #555;">Outputs</span>
+            <span style="padding: 5px 12px; font-size: 11px; color: #555;">Layout</span>
+            <span style="padding: 5px 12px; font-size: 11px; color: #555;">Appearance</span>
+            <span style="padding: 5px 12px; font-size: 11px; color: #555;">Bindings</span>
+          </div>
+        </div>
+        <!-- Content -->
+        <div style="padding: 24px 28px; flex: 1;">
+          <div style="font-size: 18px; font-weight: 600; color: #f0f0f0; margin-bottom: 4px; letter-spacing: -0.3px;">Input</div>
+          <div style="font-size: 12px; color: #666; margin-bottom: 24px;">Keyboard, touchpad, mouse, and focus behavior</div>
+
+          <!-- Sub-tabs — pill style -->
+          <div style="display: flex; gap: 4px; margin-bottom: 22px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 3px; width: fit-content;">
+            <span style="padding: 5px 14px; font-size: 11px; color: #e0e0e0; background: rgba(255,255,255,0.10); border-radius: 6px; font-weight: 500;">Keyboard</span>
+            <span style="padding: 5px 14px; font-size: 11px; color: #555;">Touchpad</span>
+            <span style="padding: 5px 14px; font-size: 11px; color: #555;">Mouse</span>
+            <span style="padding: 5px 14px; font-size: 11px; color: #555;">Focus</span>
+          </div>
+
+          <!-- Group -->
+          <div style="background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden;">
+            <!-- Section title -->
+            <div style="padding: 14px 16px 6px; font-size: 11px; font-weight: 500; color: #666;">XKB Configuration</div>
+
+            <!-- Row 1 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+              <div>
+                <div style="font-size: 13px; color: #e0e0e0; font-weight: 450;">Layout</div>
+                <div style="font-size: 11px; color: #4a4a4a; margin-top: 2px;">XKB keyboard layout (e.g. us, de, fr)</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 5px 10px; font-size: 12px; color: #aaa; min-width: 80px; text-align: center; font-family: 'JetBrains Mono', monospace;">us</div>
+            </div>
+
+            <div style="height: 1px; background: rgba(255,255,255,0.04); margin: 0 16px;"></div>
+
+            <!-- Row 2 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+              <div>
+                <div style="font-size: 13px; color: #e0e0e0; font-weight: 450;">Repeat Delay</div>
+                <div style="font-size: 11px; color: #4a4a4a; margin-top: 2px;">Milliseconds before key repeat starts</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 90px; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; position: relative;">
+                  <div style="width: 50%; height: 100%; background: rgba(255,255,255,0.25); border-radius: 3px;"></div>
+                  <div style="width: 12px; height: 12px; background: #e0e0e0; border-radius: 50%; position: absolute; top: -3.5px; left: calc(50% - 6px); box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 5px 8px; font-size: 12px; color: #aaa; width: 50px; text-align: center; font-family: 'JetBrains Mono', monospace;">600</div>
+              </div>
+            </div>
+
+            <div style="height: 1px; background: rgba(255,255,255,0.04); margin: 0 16px;"></div>
+
+            <!-- Row 3 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+              <div>
+                <div style="font-size: 13px; color: #e0e0e0; font-weight: 450;">Repeat Rate</div>
+                <div style="font-size: 11px; color: #4a4a4a; margin-top: 2px;">Characters per second during key repeat</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 90px; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; position: relative;">
+                  <div style="width: 65%; height: 100%; background: rgba(255,255,255,0.25); border-radius: 3px;"></div>
+                  <div style="width: 12px; height: 12px; background: #e0e0e0; border-radius: 50%; position: absolute; top: -3.5px; left: calc(65% - 6px); box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 5px 8px; font-size: 12px; color: #aaa; width: 50px; text-align: center; font-family: 'JetBrains Mono', monospace;">25</div>
+              </div>
+            </div>
+
+            <div style="height: 1px; background: rgba(255,255,255,0.04); margin: 0 16px;"></div>
+
+            <!-- Row 4 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+              <div>
+                <div style="font-size: 13px; color: #e0e0e0; font-weight: 450;">Numlock on Startup</div>
+                <div style="font-size: 11px; color: #4a4a4a; margin-top: 2px;">Enable numlock when niri starts</div>
+              </div>
+              <div style="width: 36px; height: 20px; background: #333; border-radius: 10px; position: relative; transition: all 0.2s;">
+                <div style="width: 16px; height: 16px; background: #888; border-radius: 50%; position: absolute; top: 2px; left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Clean & Refined</h3>
+      <p>Minimal decoration, but still warm and polished. Subtle card groups with very light borders. Proportional font for UI, monospace only for values. Gentle surface elevation — no glass/grain/glows.</p>
+      <p style="margin-top: 8px; font-size: 12px; opacity: 0.6;">Think: Apple Settings + COSMIC Settings</p>
+    </div>
+  </div>
+</div>

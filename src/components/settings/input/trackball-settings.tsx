@@ -46,7 +46,7 @@ export function TrackballSettings() {
   return (
     <div className="space-y-6">
       <SettingsGroup title="General">
-        <SettingsRow label="Disable Trackball" description="Turn off trackball input entirely">
+        <SettingsRow label="Disable Trackball" description="Ignore all trackball input">
           <Switch
             checked={tb.off}
             onCheckedChange={(v) => updateConfig((prev) => updateTrackball(prev, { off: v }))}
