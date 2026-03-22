@@ -47,18 +47,18 @@
 
     /* Custom tokens */
     --surface-raised: oklch(0.22 0 0);
-    --accent-color: oklch(0.80 0 0);
-    --accent-color-muted: oklch(0.80 0 0 / 15%);
-    --accent-color-subtle: oklch(0.80 0 0 / 8%);
+    --accent-color: oklch(0.65 0.05 250);
+    --accent-color-muted: oklch(0.65 0.05 250 / 15%);
+    --accent-color-subtle: oklch(0.65 0.05 250 / 8%);
 
     /* Control surfaces */
     --control-bg: oklch(0.15 0 0 / 50%);
     --control-border: oklch(1 0 0 / 12%);
-    --control-border-focus: oklch(0.80 0 0 / 60%);
-    --control-ring-focus: oklch(0.80 0 0 / 25%);
+    --control-border-focus: oklch(0.65 0.05 250 / 60%);
+    --control-ring-focus: oklch(0.65 0.05 250 / 25%);
     --control-raised-bg: oklch(0.85 0 0);
     --control-raised-border: oklch(0.70 0 0 / 40%);
-    --control-active-bg: oklch(0.80 0 0 / 20%);
+    --control-active-bg: oklch(0.65 0.05 250 / 20%);
 }
 
 /* Light mode */
@@ -92,17 +92,17 @@
         --sidebar-border: oklch(0 0 0 / 6%);
         --sidebar-ring: oklch(0.35 0 0);
         --surface-raised: oklch(0.985 0 0);
-        --accent-color: oklch(0.35 0 0);
-        --accent-color-muted: oklch(0.35 0 0 / 12%);
-        --accent-color-subtle: oklch(0.35 0 0 / 6%);
+        --accent-color: oklch(0.45 0.06 250);
+        --accent-color-muted: oklch(0.45 0.06 250 / 12%);
+        --accent-color-subtle: oklch(0.45 0.06 250 / 6%);
         /* Control surfaces */
         --control-bg: oklch(0.96 0 0 / 60%);
         --control-border: oklch(0 0 0 / 12%);
-        --control-border-focus: oklch(0.35 0 0 / 60%);
-        --control-ring-focus: oklch(0.35 0 0 / 25%);
+        --control-border-focus: oklch(0.45 0.06 250 / 60%);
+        --control-ring-focus: oklch(0.45 0.06 250 / 25%);
         --control-raised-bg: oklch(0.99 0 0);
         --control-raised-border: oklch(0.50 0 0 / 30%);
-        --control-active-bg: oklch(0.35 0 0 / 15%);
+        --control-active-bg: oklch(0.45 0.06 250 / 15%);
     }
 }
 
