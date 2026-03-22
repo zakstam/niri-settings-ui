@@ -19,7 +19,7 @@ export function KeyboardSettings() {
   const { xkb } = config.input.keyboard;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="XKB Configuration" description="X keyboard extension layout settings">
         <SettingsRow label="Layout" description="Keyboard layout (e.g. us, de, fr)">
           <Input

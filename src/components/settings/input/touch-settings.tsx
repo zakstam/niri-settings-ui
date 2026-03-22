@@ -24,7 +24,7 @@ export function TouchSettings() {
   const touch = config.input.touch;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="Touch">
         <SettingsRow label="Map to Output" description="Constrain touch input to a specific output">
           <Input

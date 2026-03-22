@@ -112,7 +112,7 @@ export function WindowRulesSection() {
       />
 
       {config.windowRules.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-16">
+        <div className="flex flex-col items-center gap-3 py-8">
           <p className="text-sm text-muted-foreground">
             No window rules configured.
           </p>

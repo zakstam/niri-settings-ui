@@ -117,22 +117,24 @@ export function BorderSettings() {
               <IconChevronDown size={16} />
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <div className="space-y-4 pt-3">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Active Gradient</span>
-                    <Switch
-                      checked={border.activeGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateBorder(prev, {
-                            activeGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
-                  </div>
-                  {border.activeGradient && (
+              <div className="pt-1">
+                <SettingsRow
+                  label="Active Gradient"
+                  description="Gradient overlay on the focused window border"
+                >
+                  <Switch
+                    checked={border.activeGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateBorder(prev, {
+                          activeGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {border.activeGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={border.activeGradient}
                       onChange={(v) =>
@@ -141,24 +143,26 @@ export function BorderSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Inactive Gradient</span>
-                    <Switch
-                      checked={border.inactiveGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateBorder(prev, {
-                            inactiveGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {border.inactiveGradient && (
+                )}
+
+                <SettingsRow
+                  label="Inactive Gradient"
+                  description="Gradient overlay on unfocused window borders"
+                >
+                  <Switch
+                    checked={border.inactiveGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateBorder(prev, {
+                          inactiveGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {border.inactiveGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={border.inactiveGradient}
                       onChange={(v) =>
@@ -167,24 +171,26 @@ export function BorderSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Urgent Gradient</span>
-                    <Switch
-                      checked={border.urgentGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateBorder(prev, {
-                            urgentGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {border.urgentGradient && (
+                )}
+
+                <SettingsRow
+                  label="Urgent Gradient"
+                  description="Gradient overlay on urgent window borders"
+                >
+                  <Switch
+                    checked={border.urgentGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateBorder(prev, {
+                          urgentGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {border.urgentGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={border.urgentGradient}
                       onChange={(v) =>
@@ -193,8 +199,8 @@ export function BorderSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </CollapsibleContent>
           </Collapsible>

@@ -44,7 +44,7 @@ export function MouseSettings() {
   const mouse = config.input.mouse;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Mouse" description="Turn off mouse input entirely">
           <Switch
@@ -77,7 +77,7 @@ export function MouseSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Slider
               value={[mouse.accelSpeed ?? 0]}
               min={-1}
@@ -147,7 +147,7 @@ export function MouseSettings() {
         </SettingsRow>
 
         <SettingsRow label="Scroll Factor" description="Multiplier for scroll speed (default 1.0)">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Slider
               value={[mouse.scrollFactor ?? 1.0]}
               min={0.1}

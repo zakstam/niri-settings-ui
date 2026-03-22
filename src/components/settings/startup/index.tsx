@@ -174,102 +174,87 @@ export function StartupSection() {
         description="Configure programs to launch at startup and other startup options"
       />
 
-      <SettingsGroup
-        title="Spawn at Startup"
-        description="Programs that run when niri starts"
-      >
-        {config.spawnAtStartup.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-8">
-            <p className="text-sm text-muted-foreground">
-              No startup programs configured.
-            </p>
-            <Button variant="outline" onClick={addSpawn}>
-              <IconPlus size={16} />
-              Add Program
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {config.spawnAtStartup.map((spawn, index) => (
-              <Card key={index} size="sm">
-                <CardContent className="flex items-center gap-2 py-2">
-                  {editingIndex === index ? (
-                    <>
-                      <Input
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        placeholder="command arg1 arg2..."
-                        className="flex-1"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") saveEdit();
-                          if (e.key === "Escape") cancelEdit();
-                        }}
-                      />
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        onClick={saveEdit}
-                      >
-                        <IconCheck size={14} />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        onClick={cancelEdit}
-                      >
-                        <IconX size={14} />
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <code className="flex-1 truncate text-sm">
-                        {spawn.command.join(" ")}
-                      </code>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        onClick={() => startEdit(index)}
-                      >
-                        <IconEdit size={14} />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        onClick={() => deleteSpawn(index)}
-                      >
-                        <IconTrash size={14} />
-                      </Button>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-            <Button variant="outline" size="sm" onClick={addSpawn}>
-              <IconPlus size={16} />
-              Add Program
-            </Button>
-          </div>
-        )}
-      </SettingsGroup>
+      <div className="space-y-6">
+        <SettingsGroup
+          title="Spawn at Startup"
+          description="Programs that run when niri starts"
+        >
+          {config.spawnAtStartup.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-8">
+              <p className="text-sm text-muted-foreground">
+                No startup programs configured.
+              </p>
+              <Button variant="outline" onClick={addSpawn}>
+                <IconPlus size={16} />
+                Add Program
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {config.spawnAtStartup.map((spawn, index) => (
+                <Card key={index} size="sm">
+                  <CardContent className="flex items-center gap-2 py-2">
+                    {editingIndex === index ? (
+                      <>
+                        <Input
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          placeholder="command arg1 arg2..."
+                          className="flex-1"
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") saveEdit();
+                            if (e.key === "Escape") cancelEdit();
+                          }}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon-xs"
+                          onClick={saveEdit}
+                        >
+                          <IconCheck size={14} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-xs"
+                          onClick={cancelEdit}
+                        >
+                          <IconX size={14} />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <code className="flex-1 truncate text-sm">
+                          {spawn.command.join(" ")}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="icon-xs"
+                          onClick={() => startEdit(index)}
+                        >
+                          <IconEdit size={14} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-xs"
+                          onClick={() => deleteSpawn(index)}
+                        >
+                          <IconTrash size={14} />
+                        </Button>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+              <Button variant="outline" size="sm" onClick={addSpawn}>
+                <IconPlus size={16} />
+                Add Program
+              </Button>
+            </div>
+          )}
+        </SettingsGroup>
 
-      <div className="mt-6">
         <SettingsGroup title="Options">
-          <SettingsRow
-            label="Skip Hotkey Overlay"
-            description={"Don't show the \"Important Hotkeys\" popup at startup"}
-          >
-            <Switch
-              checked={config.hotkeyOverlay.skipAtStartup}
-              onCheckedChange={(v) =>
-                updateConfig((prev) => ({
-                  ...prev,
-                  hotkeyOverlay: { ...prev.hotkeyOverlay, skipAtStartup: v },
-                }))
-              }
-            />
-          </SettingsRow>
-
           <SettingsRow
             label="Prefer No CSD"
             description="Ask clients to omit client-side decorations"
@@ -313,9 +298,7 @@ export function StartupSection() {
             </div>
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup
           title="Shell Startup Commands"
           description="Shell commands that run when niri starts (executed via sh -c)"
@@ -394,9 +377,7 @@ export function StartupSection() {
             </div>
           )}
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup
           title="Environment Variables"
           description="Environment variables set for spawned processes"

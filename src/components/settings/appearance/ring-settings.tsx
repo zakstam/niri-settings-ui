@@ -108,22 +108,24 @@ export function RingSettings() {
               <IconChevronDown size={16} />
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <div className="space-y-4 pt-3">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Active Gradient</span>
-                    <Switch
-                      checked={ring.activeGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, {
-                            activeGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
-                  </div>
-                  {ring.activeGradient && (
+              <div className="pt-1">
+                <SettingsRow
+                  label="Active Gradient"
+                  description="Gradient overlay on the focused window ring"
+                >
+                  <Switch
+                    checked={ring.activeGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateFocusRing(prev, {
+                          activeGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {ring.activeGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={ring.activeGradient}
                       onChange={(v) =>
@@ -132,24 +134,26 @@ export function RingSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Inactive Gradient</span>
-                    <Switch
-                      checked={ring.inactiveGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, {
-                            inactiveGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {ring.inactiveGradient && (
+                )}
+
+                <SettingsRow
+                  label="Inactive Gradient"
+                  description="Gradient overlay on unfocused window rings"
+                >
+                  <Switch
+                    checked={ring.inactiveGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateFocusRing(prev, {
+                          inactiveGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {ring.inactiveGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={ring.inactiveGradient}
                       onChange={(v) =>
@@ -158,24 +162,26 @@ export function RingSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Urgent Gradient</span>
-                    <Switch
-                      checked={ring.urgentGradient !== null}
-                      onCheckedChange={(v) =>
-                        updateConfig((prev) =>
-                          updateFocusRing(prev, {
-                            urgentGradient: v ? { ...defaultGradient } : null,
-                          }),
-                        )
-                      }
-                    />
                   </div>
-                  {ring.urgentGradient && (
+                )}
+
+                <SettingsRow
+                  label="Urgent Gradient"
+                  description="Gradient overlay on urgent window rings"
+                >
+                  <Switch
+                    checked={ring.urgentGradient !== null}
+                    onCheckedChange={(v) =>
+                      updateConfig((prev) =>
+                        updateFocusRing(prev, {
+                          urgentGradient: v ? { ...defaultGradient } : null,
+                        }),
+                      )
+                    }
+                  />
+                </SettingsRow>
+                {ring.urgentGradient && (
+                  <div className="px-4 pb-3">
                     <GradientEditor
                       value={ring.urgentGradient}
                       onChange={(v) =>
@@ -184,8 +190,8 @@ export function RingSettings() {
                         )
                       }
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </CollapsibleContent>
           </Collapsible>

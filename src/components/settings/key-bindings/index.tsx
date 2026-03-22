@@ -101,7 +101,7 @@ export function KeyBindingsSection() {
           </div>
 
           {filteredBindings.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-8">
+            <div className="flex flex-col items-center gap-3 py-8">
               <p className="text-sm text-muted-foreground">
                 {search
                   ? "No bindings match your search."

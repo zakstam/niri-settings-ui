@@ -1,5 +1,5 @@
 import { useConfig } from "@/lib/config-context";
-import { Button, Card, CardContent } from "spatial-grid-nav/primitives";
+import { Button } from "spatial-grid-nav/primitives";
 import { PageHeader } from "spatial-grid-nav/layouts";
 import { IconPlus } from "@tabler/icons-react";
 import { OutputCard } from "./output-card";
@@ -43,19 +43,15 @@ export function OutputsSection() {
       />
 
       {config.outputs.length === 0 ? (
-        <Card navigable={false}>
-          <CardContent className="py-12">
-            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border py-12">
-              <p className="text-sm text-muted-foreground">
-                No outputs configured. Add an output to get started.
-              </p>
-              <Button variant="outline" onClick={addOutput}>
-                <IconPlus size={16} data-icon="inline-start" />
-                Add Output
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex flex-col items-center gap-3 py-8">
+          <p className="text-sm text-muted-foreground">
+            No outputs configured. Add an output to get started.
+          </p>
+          <Button variant="outline" onClick={addOutput}>
+            <IconPlus size={16} data-icon="inline-start" />
+            Add Output
+          </Button>
+        </div>
       ) : (
         <div className="space-y-4">
           <OutputLayoutGraph />

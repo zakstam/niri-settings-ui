@@ -44,7 +44,7 @@ export function TrackballSettings() {
   const tb = config.input.trackball;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="General">
         <SettingsRow label="Disable Trackball" description="Turn off trackball input entirely">
           <Switch
@@ -77,7 +77,7 @@ export function TrackballSettings() {
 
       <SettingsGroup title="Acceleration">
         <SettingsRow label="Acceleration Speed" description="Pointer acceleration speed (-1 to 1)">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Slider
               value={[tb.accelSpeed ?? 0]}
               min={-1}

@@ -45,60 +45,62 @@ export function AdvancedSection() {
         description="Layer rules and other advanced configuration"
       />
 
-      <SettingsGroup
-        title="Layer Rules"
-        description="Configure rules for layer-shell surfaces"
-      >
-        {config.layerRules.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4">
-            No layer rules configured.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {config.layerRules.map((rule) => (
-              <Card key={rule.id} size="sm">
-                <CardContent className="flex items-center gap-2 py-2">
-                  <div className="flex flex-1 flex-wrap items-center gap-1.5">
-                    {rule.matches.map((m, i) => (
-                      <Badge key={i} variant="outline">
-                        {m.namespace ?? "any"}
-                      </Badge>
-                    ))}
-                    {rule.placeWithinBackdrop && (
-                      <Badge variant="secondary">backdrop</Badge>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    onClick={() => deleteLayerRule(rule.id)}
-                  >
-                    <IconTrash size={14} />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+      <div className="space-y-6">
+        <SettingsGroup
+          title="Layer Rules"
+          description="Configure rules for layer-shell surfaces"
+        >
+          {config.layerRules.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-8">
+              <p className="text-sm text-muted-foreground">
+                No layer rules configured.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {config.layerRules.map((rule) => (
+                <Card key={rule.id} size="sm">
+                  <CardContent className="flex items-center gap-2 py-2">
+                    <div className="flex flex-1 flex-wrap items-center gap-1.5">
+                      {rule.matches.map((m, i) => (
+                        <Badge key={i} variant="outline">
+                          {m.namespace ?? "any"}
+                        </Badge>
+                      ))}
+                      {rule.placeWithinBackdrop && (
+                        <Badge variant="secondary">backdrop</Badge>
+                      )}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      onClick={() => deleteLayerRule(rule.id)}
+                    >
+                      <IconTrash size={14} />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 pt-2">
+            <Input
+              value={newNamespace}
+              onChange={(e) => setNewNamespace(e.target.value)}
+              placeholder="Namespace (e.g. waybar)"
+              className="flex-1"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") addLayerRule();
+              }}
+            />
+            <Button variant="outline" size="sm" onClick={addLayerRule}>
+              <IconPlus size={16} />
+              Add
+            </Button>
           </div>
-        )}
+        </SettingsGroup>
 
-        <div className="flex items-center gap-2 pt-2">
-          <Input
-            value={newNamespace}
-            onChange={(e) => setNewNamespace(e.target.value)}
-            placeholder="Namespace (e.g. waybar)"
-            className="flex-1"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") addLayerRule();
-            }}
-          />
-          <Button variant="outline" size="sm" onClick={addLayerRule}>
-            <IconPlus size={16} />
-            Add
-          </Button>
-        </div>
-      </SettingsGroup>
-
-      <div className="mt-6">
         <SettingsGroup title="Cursor" description="Mouse cursor appearance and behavior">
           <SettingsRow label="Theme" description="XCursor theme name">
             <Input
@@ -167,9 +169,7 @@ export function AdvancedSection() {
             />
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup title="Clipboard" description="Clipboard behavior settings">
           <SettingsRow label="Disable Primary Selection" description="Disable the primary (middle-click) clipboard">
             <Switch
@@ -183,9 +183,7 @@ export function AdvancedSection() {
             />
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup title="Xwayland Satellite" description="Xwayland compatibility layer settings">
           <SettingsRow label="Path" description="Path to the xwayland-satellite binary">
             <Input
@@ -204,9 +202,7 @@ export function AdvancedSection() {
             />
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup title="Config Notification" description="Notification shown when config is reloaded">
           <SettingsRow label="Disable Failed Notification" description="Do not show a notification when config reload fails">
             <Switch
@@ -220,9 +216,7 @@ export function AdvancedSection() {
             />
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup title="Hotkey Overlay" description="The hotkey overlay shown at startup">
           <SettingsRow label="Skip at Startup" description={"Don't show the \"Important Hotkeys\" popup at startup"}>
             <Switch
@@ -248,9 +242,7 @@ export function AdvancedSection() {
             />
           </SettingsRow>
         </SettingsGroup>
-      </div>
 
-      <div className="mt-6">
         <SettingsGroup
           title="Raw Configuration"
           description="Some settings can only be edited directly in the config file"

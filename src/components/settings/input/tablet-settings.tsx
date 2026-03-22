@@ -24,7 +24,7 @@ export function TabletSettings() {
   const tablet = config.input.tablet;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="Tablet">
         <SettingsRow label="Map to Output" description="Constrain the tablet to a specific output">
           <Input

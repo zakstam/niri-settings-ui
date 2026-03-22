@@ -19,7 +19,7 @@ export function FocusSettings() {
   const ffmEnabled = config.input.focusFollowsMouse !== null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <SettingsGroup title="Focus Behavior" description="Configure how window focus follows the mouse">
         <SettingsRow label="Warp Mouse to Focus" description="Move the mouse cursor to the newly focused window">
           <Switch
