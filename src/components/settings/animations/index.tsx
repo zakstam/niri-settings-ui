@@ -80,17 +80,25 @@ export function AnimationsSection() {
 
         {!config.animations.off && (
           <>
-            <AnimationCard name="workspaceSwitch" label="Workspace Switch" />
+            {/* Window Lifecycle */}
+            <h3 className="text-xs font-medium text-muted-foreground pt-2">Window Lifecycle</h3>
             <AnimationCard name="windowOpen" label="Window Open" />
             <AnimationCard name="windowClose" label="Window Close" />
-            <AnimationCard name="horizontalViewMovement" label="Horizontal View Movement" />
             <AnimationCard name="windowMovement" label="Window Movement" />
             <AnimationCard name="windowResize" label="Window Resize" />
+
+            {/* Workspace & UI */}
+            <h3 className="text-xs font-medium text-muted-foreground pt-2">Workspace & UI</h3>
+            <AnimationCard name="workspaceSwitch" label="Workspace Switch" />
+            <AnimationCard name="horizontalViewMovement" label="Horizontal View Movement" />
+            <AnimationCard name="overviewOpenClose" label="Overview" />
+            <AnimationCard name="recentWindowsClose" label="Recent Windows Close" />
+
+            {/* System Overlays */}
+            <h3 className="text-xs font-medium text-muted-foreground pt-2">System Overlays</h3>
             <AnimationCard name="configNotificationOpenClose" label="Config Notification" />
             <AnimationCard name="exitConfirmationOpenClose" label="Exit Confirmation" />
             <AnimationCard name="screenshotUiOpen" label="Screenshot UI" />
-            <AnimationCard name="overviewOpenClose" label="Overview" />
-            <AnimationCard name="recentWindowsClose" label="Recent Windows Close" />
           </>
         )}
       </div>
