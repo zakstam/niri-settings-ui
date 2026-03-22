@@ -363,24 +363,9 @@ export function OutputLayoutGraph() {
     };
   }, [dragState, resolvedOutputs, snappingEnabled, updateConfig]);
 
-  useEffect(() => {
-    if (!config || config.outputs.length === 0) return;
-    const first = config.outputs[0];
-    if ((first.positionX ?? 0) === 0 && (first.positionY ?? 0) === 0) return;
-
-    updateConfig((prev) => ({
-      ...prev,
-      outputs: prev.outputs.map((output, index) =>
-        index === 0
-          ? {
-              ...output,
-              positionX: 0,
-              positionY: 0,
-            }
-          : output,
-      ),
-    }));
-  }, [config, updateConfig]);
+  // The first output's position is treated as the origin (0,0) for display
+  // purposes in resolveOutputPositions, but we don't mutate the config to
+  // enforce this — the stored positionX/Y values are preserved as-is.
 
   if (!config) return null;
   if (config.outputs.length === 0) return null;
