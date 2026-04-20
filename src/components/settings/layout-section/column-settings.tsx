@@ -126,8 +126,8 @@ interface DefaultWidthEditorProps {
 }
 
 function DefaultWidthEditor({ value, onChange }: DefaultWidthEditorProps) {
-  const state = value === null ? "unset" : value.length === 0 ? "empty" : "custom";
-  const first = value !== null && value.length > 0 ? value[0] : null;
+  const state = value == null ? "unset" : value.length === 0 ? "empty" : "custom";
+  const first = value != null && value.length > 0 ? value[0] : null;
 
   return (
     <div className="space-y-2">
